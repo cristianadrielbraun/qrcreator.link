@@ -49,7 +49,7 @@ func QRCodeSection(link LinkData) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("(() => { if (window.__qrLastUrl) { setUrl(window.__qrLastUrl); initializeQR(); } else { setUrl('https://%s/%s') } })()", link.Domain, link.ShortCode))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/qrcode.templ`, Line: 20, Col: 179}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/qrcode_section.templ`, Line: 20, Col: 179}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
