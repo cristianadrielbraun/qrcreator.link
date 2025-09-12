@@ -1,0 +1,47 @@
+.gocache/
+
+# Go build artifacts
+/qrcreator.link
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.log
+
+# Coverage and profiling
+coverage*
+coverage/
+*.coverprofile
+*.cov
+*.prof
+*.pprof
+cpu.prof
+mem.prof
+trace.out
+profile.out
+
+# Build outputs
+bin/
+build/
+dist/
+tmp/
+*.tmp
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# IDE/OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# App runtime/uploads
+uploads/

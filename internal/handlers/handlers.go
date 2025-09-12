@@ -6,4 +6,3 @@ type Handler struct{}
 
 // New returns a new Handler instance.
 func New() *Handler { return &Handler{} }
-
