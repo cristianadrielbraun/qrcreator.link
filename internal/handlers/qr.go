@@ -15,7 +15,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
+    "time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/srwiley/oksvg"
@@ -24,6 +24,15 @@ import (
 	"github.com/yeqown/go-qrcode/writer/standard"
 	"github.com/yeqown/go-qrcode/writer/standard/shapes"
 )
+
+// min4 returns the minimum of four integers.
+func min4(a, b, c, d int) int {
+    m := a
+    if b < m { m = b }
+    if c < m { m = c }
+    if d < m { m = d }
+    return m
+}
 
 // QRCodeHandler generates QR codes for URLs with advanced customization options
 func (h *Handler) QRCodeHandler(c *gin.Context) {
@@ -1202,8 +1211,8 @@ func (h *Handler) addFrameToQRFile(filename, frameType string, frameWidth int, b
 	}
 	// If transparent, RGBA image starts with transparent pixels by default
 
-	// Helper function to calculate gradient color at position (45-degree, bottom-left to top-right)
-	calculateFrameColor := func(x, y int) color.RGBA {
+    // Helper function to calculate gradient color at position (45-degree, bottom-left to top-right)
+    calculateFrameColor := func(x, y int) color.RGBA {
 		if !useGradient {
 			return frameColor
 		}
@@ -1237,9 +1246,44 @@ func (h *Handler) addFrameToQRFile(filename, frameType string, frameWidth int, b
 		}
 	}
 
-	// Draw frame border based on type
-	for y := 0; y < newHeight; y++ {
-		for x := 0; x < newWidth; x++ {
+    // Helper: rounded rectangle hit test used for rounded gap shaping
+    insideRoundedRect := func(x, y, left, top, right, bottom, r int) bool {
+        if left > right || top > bottom {
+            return false
+        }
+        if r <= 0 {
+            return x >= left && x <= right && y >= top && y <= bottom
+        }
+        // Straight bands
+        if x >= left+r && x <= right-r && y >= top && y <= bottom {
+            return true
+        }
+        if y >= top+r && y <= bottom-r && x >= left && x <= right {
+            return true
+        }
+        // Corner circles
+        dx, dy := x-(left+r), y-(top+r)
+        if dx*dx+dy*dy <= r*r {
+            return true
+        }
+        dx, dy = x-(right-r), y-(top+r)
+        if dx*dx+dy*dy <= r*r {
+            return true
+        }
+        dx, dy = x-(left+r), y-(bottom-r)
+        if dx*dx+dy*dy <= r*r {
+            return true
+        }
+        dx, dy = x-(right-r), y-(bottom-r)
+        if dx*dx+dy*dy <= r*r {
+            return true
+        }
+        return false
+    }
+
+    // Draw frame border based on type
+    for y := 0; y < newHeight; y++ {
+        for x := 0; x < newWidth; x++ {
 			isFrameArea := x < frameWidth || x >= newWidth-frameWidth || y < frameWidth || y >= newHeight-frameWidth
 			if !isFrameArea {
 				continue
@@ -1356,26 +1400,112 @@ func (h *Handler) addFrameToQRFile(filename, frameType string, frameWidth int, b
 						}
 					}
 				}
-			case "double":
-				// Double border - very thick outer line, thinner inner line
-				outerWidth := frameWidth / 2
-				if outerWidth < 4 {
-					outerWidth = 4
-				}
-				innerWidth := frameWidth / 6
-				if innerWidth < 1 {
-					innerWidth = 1
-				}
+            case "double":
+                // Double border with optional rounded corners.
+                // Split frameWidth into outer stroke | gap | inner stroke
+                outerWidth := int(math.Max(2, math.Round(float64(frameWidth)*0.4)))
+                gapWidth := int(math.Max(1, math.Round(float64(frameWidth)*0.2)))
+                innerWidth := frameWidth - outerWidth - gapWidth
+                if innerWidth < 1 { innerWidth = 1 }
+                // Bias inner stroke thicker without changing outer weight:
+                // move a small delta from the gap to the inner band.
+                delta := int(math.Max(1, math.Round(float64(frameWidth)*0.1)))
+                if gapWidth > delta {
+                    gapWidth -= delta
+                    innerWidth += delta
+                } else if gapWidth > 1 { // ensure at least 1px gap remains
+                    innerWidth += (gapWidth - 1)
+                    gapWidth = 1
+                }
+                // Adjust band balance depending on rounded vs straight.
+                // Rounded: widen the transparent gap slightly by borrowing from the outer band
+                // (keeps the current rounded look you liked).
+                // Straight: make the outer band a bit thicker by borrowing from the gap.
+                if strings.HasPrefix(frameType, "rounded-") {
+                    deltaGap := int(math.Max(1, math.Round(float64(frameWidth)*0.1)))
+                    if outerWidth > deltaGap+1 { // leave at least 1px outer stroke
+                        outerWidth -= deltaGap
+                        gapWidth += deltaGap
+                    }
+                } else {
+                    deltaOuter := int(math.Max(1, math.Round(float64(frameWidth)*0.1)))
+                    if gapWidth > deltaOuter { // prefer to reduce gap first
+                        gapWidth -= deltaOuter
+                        outerWidth += deltaOuter
+                    } else if gapWidth > 1 { // ensure at least 1px gap remains
+                        outerWidth += (gapWidth - 1)
+                        gapWidth = 1
+                    } else if innerWidth > 1 { // as a last resort, borrow from inner minimally
+                        outerWidth += 1
+                        innerWidth -= 1
+                    }
+                    // Fine-tune: give the gap +1px from the inner band if available
+                    // to restore a tiny breathing room between strokes.
+                    if innerWidth > 2 {
+                        innerWidth -= 1
+                        gapWidth += 1
+                    }
+                }
 
-				// Outer line (thicker)
-				isOuter := x < outerWidth || x >= newWidth-outerWidth || y < outerWidth || y >= newHeight-outerWidth
-				// Inner line (thinner)
-				isInner := (x >= frameWidth-innerWidth && x < frameWidth) || (x >= newWidth-frameWidth && x < newWidth-frameWidth+innerWidth) ||
-					(y >= frameWidth-innerWidth && y < frameWidth) || (y >= newHeight-frameWidth && y < newHeight-frameWidth+innerWidth)
+                if strings.HasPrefix(frameType, "rounded-") {
+                    // Rounded classification using rounded rectangles relative to the inner boundary.
+                    innerL, innerT := frameWidth, frameWidth
+                    innerRgt, innerBtm := newWidth-1-frameWidth, newHeight-1-frameWidth
+                    baseR := int(math.Round(float64(frameWidth)*0.55)) // approximate inner corner radius
 
-				if isOuter || isInner {
-					framedImg.Set(x, y, calculateFrameColor(x, y))
-				}
+                    // Offsets from inner boundary for rings
+                    offIn := innerWidth
+                    offGap := innerWidth + gapWidth
+                    offOut := innerWidth + gapWidth + outerWidth // should equal frameWidth
+
+                    // Precompute expanded boxes and radii
+                    clamp := func(v, lo, hi int) int { if v < lo { return lo }; if v > hi { return hi }; return v }
+
+                    // Inner stroke outer edge
+                    inL := clamp(innerL-offIn, 0, newWidth-1)
+                    inT := clamp(innerT-offIn, 0, newHeight-1)
+                    inR := clamp(innerRgt+offIn, 0, newWidth-1)
+                    inB := clamp(innerBtm+offIn, 0, newHeight-1)
+                    rIn := baseR + offIn
+
+                    // Gap outer edge
+                    gL := clamp(innerL-offGap, 0, newWidth-1)
+                    gT := clamp(innerT-offGap, 0, newHeight-1)
+                    gR := clamp(innerRgt+offGap, 0, newWidth-1)
+                    gB := clamp(innerBtm+offGap, 0, newHeight-1)
+                    rGap := baseR + offGap
+
+                    // Outer stroke outer edge (close to image bounds)
+                    oL := clamp(innerL-offOut, 0, newWidth-1)
+                    oT := clamp(innerT-offOut, 0, newHeight-1)
+                    oR := clamp(innerRgt+offOut, 0, newWidth-1)
+                    oB := clamp(innerBtm+offOut, 0, newHeight-1)
+                    rOut := baseR + offOut
+
+                    // Membership tests
+                    inInnerCore := insideRoundedRect(x, y, innerL, innerT, innerRgt, innerBtm, baseR)
+                    inInnerBand := insideRoundedRect(x, y, inL, inT, inR, inB, rIn) && !inInnerCore
+                    inGapBand := insideRoundedRect(x, y, gL, gT, gR, gB, rGap) && !insideRoundedRect(x, y, inL, inT, inR, inB, rIn)
+                    inOuterBand := insideRoundedRect(x, y, oL, oT, oR, oB, rOut) && !insideRoundedRect(x, y, gL, gT, gR, gB, rGap)
+
+                    if inOuterBand {
+                        framedImg.Set(x, y, calculateFrameColor(x, y))
+                    } else if inGapBand {
+                        framedImg.Set(x, y, bgColor)
+                    } else if inInnerBand {
+                        framedImg.Set(x, y, calculateFrameColor(x, y))
+                    }
+                } else {
+                    // Straight double using edge-distance bands
+                    edgeDist := min4(x, y, newWidth-1-x, newHeight-1-y)
+                    if edgeDist < outerWidth {
+                        framedImg.Set(x, y, calculateFrameColor(x, y))
+                    } else if edgeDist < outerWidth+gapWidth {
+                        framedImg.Set(x, y, bgColor)
+                    } else if edgeDist < outerWidth+gapWidth+innerWidth {
+                        framedImg.Set(x, y, calculateFrameColor(x, y))
+                    }
+                }
 			case "diagonal":
 				// Diagonal lines pattern
 				// Increase stroke thickness so lines are more visible
