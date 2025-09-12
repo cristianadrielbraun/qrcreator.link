@@ -3,8 +3,8 @@ package pages
 import (
     "github.com/cristianadrielbraun/qrcreator.link/web/layouts"
     "github.com/cristianadrielbraun/qrcreator.link/web/components"
-    input "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/input"
-    button "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/input"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/icon"
 )
 
@@ -19,10 +19,27 @@ templ homeContent() {
                 <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">Paste a link and press enter</p>
             </div>
             <div class="relative">
-                @input.Input(input.Props{Type: input.TypeURL, Placeholder: "https://example.com", Attributes: templ.Attributes{"x-model": "userUrl", "@keydown.enter.prevent": "phase==='landing' ? submit() : resubmit()"}})
+                @input.Input(input.Props{
+                    Type:        input.TypeURL,
+                    Placeholder: "https://example.com",
+                    Required:    true,
+                    Attributes: templ.Attributes{
+                        "x-model":                    "userUrl",
+                        "x-ref":                      "urlInput",
+                        "@keydown.enter.prevent":     "phase==='landing' ? submit() : resubmit()",
+                        "@input":                     "if (errorMsg && userUrl) { urlValid = true }",
+                        ":aria-invalid":              "!urlValid && !!userUrl",
+                        "aria-describedby":           "url-error",
+                        "inputmode":                  "url",
+                        "autocomplete":               "url",
+                    },
+                })
                 @button.Button(button.Props{Size: button.SizeIcon, Variant: button.VariantDefault, Class: "absolute right-0 top-1/2 -translate-y-1/2", Attributes: templ.Attributes{"@click": "phase==='landing' ? submit() : resubmit()", "aria-label": "Generate QR"}}) {
                     @icon.ArrowRight(icon.Props{Size: 18})
                 }
+                <p id="url-error" x-show="!urlValid && !!userUrl" x-cloak class="mt-2 text-sm text-destructive">
+                    <span x-text="errorMsg || 'Enter a valid URL (e.g., https://example.com)'"></span>
+                </p>
             </div>
         </div>
 
@@ -37,9 +54,38 @@ templ homeContent() {
                     phase: 'landing',
                     showTitle: true,
                     userUrl: '',
+                    urlValid: true,
+                    errorMsg: '',
+                    validateAndNormalize(value) {
+                        if (!value) { return { ok: false, value: '', msg: 'URL cannot be empty' }; }
+                        let v = value.trim();
+                        // If no scheme, assume https
+                        if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v)) { v = 'https://' + v; }
+                        try {
+                            const u = new URL(v);
+                            if (!/^https?:$/.test(u.protocol)) { return { ok: false, value: '', msg: 'Only http and https URLs are supported' }; }
+                            if (!u.hostname) { return { ok: false, value: '', msg: 'URL must include a valid host' }; }
+                            return { ok: true, value: u.toString(), msg: '' };
+                        } catch (e) {
+                            return { ok: false, value: '', msg: 'Enter a valid URL (e.g., https://example.com)' };
+                        }
+                    },
+                    showToast(title, description, variant) {
+                        const form = document.createElement('form'); form.style.display = 'none';
+                        const ti = document.createElement('input'); ti.name = 'title'; ti.value = title; form.appendChild(ti);
+                        const di = document.createElement('input'); di.name = 'description'; di.value = description; form.appendChild(di);
+                        const vi = document.createElement('input'); vi.name = 'variant'; vi.value = variant; form.appendChild(vi);
+                        const ds = document.createElement('input'); ds.name = 'dismissible'; ds.value = 'on'; form.appendChild(ds);
+                        document.body.appendChild(form);
+                        if (window.htmx) { htmx.ajax('POST', '/api/htmx/toast', { source: form, target: '#toast-container', swap: 'afterbegin' }); }
+                        document.body.removeChild(form);
+                    },
                     submit() {
-                        const url = this.userUrl && this.userUrl.trim();
-                        if (!url) return;
+                        const out = this.validateAndNormalize(this.userUrl);
+                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }
+                        const url = out.value;
+                        this.urlValid = true; this.errorMsg = '';
+                        this.userUrl = url;
                         // 1) Fade out title first (200ms)
                         this.showTitle = false;
                         // 2) After fade, move input towards top (300ms via margin change)
@@ -51,8 +97,9 @@ templ homeContent() {
                         }, 200 + 300);
                     },
                     resubmit() {
-                        const url = this.userUrl && this.userUrl.trim();
-                        if (!url) return;
+                        const out = this.validateAndNormalize(this.userUrl);
+                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }
+                        const url = out.value; this.urlValid = true; this.errorMsg = ''; this.userUrl = url;
                         window.__qrLastUrl = url;
                         window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));
                     }

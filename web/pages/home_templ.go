@@ -10,9 +10,9 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"github.com/cristianadrielbraun/qrcreator.link/web/components"
-	button "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
+	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
 	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/icon"
-	input "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/input"
+	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/input"
 	"github.com/cristianadrielbraun/qrcreator.link/web/layouts"
 )
 
@@ -42,7 +42,21 @@ func homeContent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = input.Input(input.Props{Type: input.TypeURL, Placeholder: "https://example.com", Attributes: templ.Attributes{"x-model": "userUrl", "@keydown.enter.prevent": "phase==='landing' ? submit() : resubmit()"}}).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = input.Input(input.Props{
+			Type:        input.TypeURL,
+			Placeholder: "https://example.com",
+			Required:    true,
+			Attributes: templ.Attributes{
+				"x-model":                "userUrl",
+				"x-ref":                  "urlInput",
+				"@keydown.enter.prevent": "phase==='landing' ? submit() : resubmit()",
+				"@input":                 "if (errorMsg && userUrl) { urlValid = true }",
+				":aria-invalid":          "!urlValid && !!userUrl",
+				"aria-describedby":       "url-error",
+				"inputmode":              "url",
+				"autocomplete":           "url",
+			},
+		}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -68,7 +82,7 @@ func homeContent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div></div><!-- QR body under the top input --><section x-show=\"phase === 'qr'\" x-transition.opacity.duration.250ms class=\"mx-auto max-w-5xl px-4 mt-6\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<p id=\"url-error\" x-show=\"!urlValid && !!userUrl\" x-cloak class=\"mt-2 text-sm text-destructive\"><span x-text=\"errorMsg || 'Enter a valid URL (e.g., https://example.com)'\"></span></p></div></div><!-- QR body under the top input --><section x-show=\"phase === 'qr'\" x-transition.opacity.duration.250ms class=\"mx-auto max-w-5xl px-4 mt-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -76,7 +90,7 @@ func homeContent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</section><script>\n            function qrLanding() {\n                return {\n                    phase: 'landing',\n                    showTitle: true,\n                    userUrl: '',\n                    submit() {\n                        const url = this.userUrl && this.userUrl.trim();\n                        if (!url) return;\n                        // 1) Fade out title first (200ms)\n                        this.showTitle = false;\n                        // 2) After fade, move input towards top (300ms via margin change)\n                        setTimeout(() => { this.phase = 'qr'; }, 200);\n                        window.__qrLastUrl = url;\n                        // 3) Notify QR section after movement completes\n                        setTimeout(() => {\n                            window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                        }, 200 + 300);\n                    },\n                    resubmit() {\n                        const url = this.userUrl && this.userUrl.trim();\n                        if (!url) return;\n                        window.__qrLastUrl = url;\n                        window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                    }\n                }\n            }\n        </script></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</section><script>\n            function qrLanding() {\n                return {\n                    phase: 'landing',\n                    showTitle: true,\n                    userUrl: '',\n                    urlValid: true,\n                    errorMsg: '',\n                    validateAndNormalize(value) {\n                        if (!value) { return { ok: false, value: '', msg: 'URL cannot be empty' }; }\n                        let v = value.trim();\n                        // If no scheme, assume https\n                        if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v)) { v = 'https://' + v; }\n                        try {\n                            const u = new URL(v);\n                            if (!/^https?:$/.test(u.protocol)) { return { ok: false, value: '', msg: 'Only http and https URLs are supported' }; }\n                            if (!u.hostname) { return { ok: false, value: '', msg: 'URL must include a valid host' }; }\n                            return { ok: true, value: u.toString(), msg: '' };\n                        } catch (e) {\n                            return { ok: false, value: '', msg: 'Enter a valid URL (e.g., https://example.com)' };\n                        }\n                    },\n                    showToast(title, description, variant) {\n                        const form = document.createElement('form'); form.style.display = 'none';\n                        const ti = document.createElement('input'); ti.name = 'title'; ti.value = title; form.appendChild(ti);\n                        const di = document.createElement('input'); di.name = 'description'; di.value = description; form.appendChild(di);\n                        const vi = document.createElement('input'); vi.name = 'variant'; vi.value = variant; form.appendChild(vi);\n                        const ds = document.createElement('input'); ds.name = 'dismissible'; ds.value = 'on'; form.appendChild(ds);\n                        document.body.appendChild(form);\n                        if (window.htmx) { htmx.ajax('POST', '/api/htmx/toast', { source: form, target: '#toast-container', swap: 'afterbegin' }); }\n                        document.body.removeChild(form);\n                    },\n                    submit() {\n                        const out = this.validateAndNormalize(this.userUrl);\n                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }\n                        const url = out.value;\n                        this.urlValid = true; this.errorMsg = '';\n                        this.userUrl = url;\n                        // 1) Fade out title first (200ms)\n                        this.showTitle = false;\n                        // 2) After fade, move input towards top (300ms via margin change)\n                        setTimeout(() => { this.phase = 'qr'; }, 200);\n                        window.__qrLastUrl = url;\n                        // 3) Notify QR section after movement completes\n                        setTimeout(() => {\n                            window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                        }, 200 + 300);\n                    },\n                    resubmit() {\n                        const out = this.validateAndNormalize(this.userUrl);\n                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }\n                        const url = out.value; this.urlValid = true; this.errorMsg = ''; this.userUrl = url;\n                        window.__qrLastUrl = url;\n                        window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                    }\n                }\n            }\n        </script></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

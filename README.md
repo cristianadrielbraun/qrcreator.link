@@ -1,3 +1,8 @@
+<h1><img align="left" height="50" src="web/static/logo.svg"> qrcreator.link</h1>
+
+
+
+
 Source code of qrcreator.link site made with Go + templ, using Tailwind, HTMX, AlpineJS, templui for components.
 The service is up & running in [qrcreator.link](https://qrcreator.link)
 

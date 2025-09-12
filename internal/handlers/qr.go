@@ -11,6 +11,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -25,6 +26,34 @@ import (
 	"github.com/yeqown/go-qrcode/writer/standard/shapes"
 )
 
+// normalizeHTTPURL validates and normalizes a URL string for QR generation.
+// It ensures an http/https scheme, a non-empty hostname, and returns a cleaned absolute URL.
+func normalizeHTTPURL(s string) (string, error) {
+    v := strings.TrimSpace(s)
+    if v == "" {
+        return "", fmt.Errorf("URL parameter is required")
+    }
+    // If missing scheme, default to https
+    if !strings.Contains(v, "://") {
+        v = "https://" + v
+    }
+    u, err := url.ParseRequestURI(v)
+    if err != nil {
+        return "", fmt.Errorf("invalid URL: %v", err)
+    }
+    if u.Scheme != "http" && u.Scheme != "https" {
+        return "", fmt.Errorf("only http and https URLs are supported")
+    }
+    if u.Host == "" {
+        return "", fmt.Errorf("URL must include a valid host")
+    }
+    // Optional: cap length to avoid abuse
+    if len(v) > 4096 {
+        return "", fmt.Errorf("URL is too long")
+    }
+    return u.String(), nil
+}
+
 // min4 returns the minimum of four integers.
 func min4(a, b, c, d int) int {
     m := a
@@ -36,9 +65,15 @@ func min4(a, b, c, d int) int {
 
 // QRCodeHandler generates QR codes for URLs with advanced customization options
 func (h *Handler) QRCodeHandler(c *gin.Context) {
-    url := c.Query("url")
-    if url == "" {
+    rawURL := strings.TrimSpace(c.Query("url"))
+    if rawURL == "" {
         c.JSON(http.StatusBadRequest, gin.H{"error": "URL parameter is required"})
+        return
+    }
+
+    normalizedURL, err := normalizeHTTPURL(rawURL)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
 
@@ -81,7 +116,7 @@ func (h *Handler) QRCodeHandler(c *gin.Context) {
 
     // Basic request debug info
     fmt.Printf("[QR] request start: url=%q format=%s size=%s colorMode=%s qrShape=%s branding=%s\n",
-        url, format, size, c.DefaultQuery("colorMode", "flat"), c.DefaultQuery("qrShape", "rectangle"), c.DefaultQuery("branding", "default"))
+        normalizedURL, format, size, c.DefaultQuery("colorMode", "flat"), c.DefaultQuery("qrShape", "rectangle"), c.DefaultQuery("branding", "default"))
 
 	// Handle color mode
 	var useGradient bool
@@ -134,7 +169,7 @@ func (h *Handler) QRCodeHandler(c *gin.Context) {
 	logoFile := c.Query("logoFile")
 
 	// Create QR code instance with Q error correction level
-	qrc, err := qrcode.NewWith(url, qrcode.WithErrorCorrectionLevel(qrcode.ErrorCorrectionQuart))
+	qrc, err := qrcode.NewWith(normalizedURL, qrcode.WithErrorCorrectionLevel(qrcode.ErrorCorrectionQuart))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create QR code"})
 		return
