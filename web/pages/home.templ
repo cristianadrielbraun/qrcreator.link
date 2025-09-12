@@ -20,7 +20,7 @@ templ homeContent() {
             </div>
             <div class="relative">
                 @input.Input(input.Props{Type: input.TypeURL, Placeholder: "https://example.com", Attributes: templ.Attributes{"x-model": "userUrl", "@keydown.enter.prevent": "phase==='landing' ? submit() : resubmit()"}})
-                @button.Button(button.Props{Size: button.SizeIcon, Variant: button.VariantDefault, Class: "absolute right-1 top-1/2 -translate-y-1/2", Attributes: templ.Attributes{"@click": "phase==='landing' ? submit() : resubmit()", "aria-label": "Generate QR"}}) {
+                @button.Button(button.Props{Size: button.SizeIcon, Variant: button.VariantDefault, Class: "absolute right-0 top-1/2 -translate-y-1/2", Attributes: templ.Attributes{"@click": "phase==='landing' ? submit() : resubmit()", "aria-label": "Generate QR"}}) {
                     @icon.ArrowRight(icon.Props{Size: 18})
                 }
             </div>

@@ -64,7 +64,7 @@ func homeContent() templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = button.Button(button.Props{Size: button.SizeIcon, Variant: button.VariantDefault, Class: "absolute right-1 top-1/2 -translate-y-1/2", Attributes: templ.Attributes{"@click": "phase==='landing' ? submit() : resubmit()", "aria-label": "Generate QR"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = button.Button(button.Props{Size: button.SizeIcon, Variant: button.VariantDefault, Class: "absolute right-0 top-1/2 -translate-y-1/2", Attributes: templ.Attributes{"@click": "phase==='landing' ? submit() : resubmit()", "aria-label": "Generate QR"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

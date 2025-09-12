@@ -47,7 +47,7 @@ func Layout(title string, children templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><meta name=\"description\" content=\"Create QR codes instantly at qrcreator.link\"><link rel=\"icon\" type=\"image/svg+xml\" href=\"/web/static/logo.svg\"><link href=\"/web/static/css/tailwind.min.css\" rel=\"stylesheet\"><script defer src=\"/web/static/js/vendor/alpine.min.js\"></script><script defer src=\"/web/static/js/vendor/htmx.min.js\"></script><script defer src=\"/web/static/js/tab-indicator.js\"></script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><meta name=\"description\" content=\"Create QR codes instantly at qrcreator.link\"><link rel=\"icon\" type=\"image/x-icon\" href=\"/web/static/logo.ico\"><link href=\"/web/static/css/tailwind.min.css\" rel=\"stylesheet\"><script defer src=\"/web/static/js/vendor/alpine.min.js\"></script><script defer src=\"/web/static/js/vendor/htmx.min.js\"></script><script defer src=\"/web/static/js/tab-indicator.js\"></script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
