@@ -1,6 +1,0 @@
-./gradient.go
-./image_format.go
-./image_option.go
-./image_option_api.go
-./image_qr_shape.go
-./writer.go
