@@ -1,0 +1,68 @@
+package pages
+
+import (
+    "github.com/cristianadrielbraun/qrcreator.link/web/layouts"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components"
+    input "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/input"
+    button "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/icon"
+)
+
+// Home content: landing input + QR UI
+templ homeContent() {
+    <div x-data="qrLanding()" class="relative">
+        <!-- Single input container: starts lower, then transitions margin to top -->
+        <div class="mx-auto max-w-xl px-4 transition-all duration-300 ease-out"
+             :class="phase === 'landing' ? 'mt-24' : 'mt-4'">
+            <div class="text-center mb-3" x-show="showTitle" x-transition.opacity.duration.200ms>
+                <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Create a QR from any URL</h1>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">Paste a link and press enter</p>
+            </div>
+            <div class="relative">
+                @input.Input(input.Props{Type: input.TypeURL, Placeholder: "https://example.com", Attributes: templ.Attributes{"x-model": "userUrl", "@keydown.enter.prevent": "phase==='landing' ? submit() : resubmit()"}})
+                @button.Button(button.Props{Size: button.SizeIcon, Variant: button.VariantDefault, Class: "absolute right-1 top-1/2 -translate-y-1/2", Attributes: templ.Attributes{"@click": "phase==='landing' ? submit() : resubmit()", "aria-label": "Generate QR"}}) {
+                    @icon.ArrowRight(icon.Props{Size: 18})
+                }
+            </div>
+        </div>
+
+        <!-- QR body under the top input -->
+        <section x-show="phase === 'qr'" x-transition.opacity.duration.250ms class="mx-auto max-w-5xl px-4 mt-6">
+            @components.QRCodeSection(components.LinkData{Domain: "qrcreator.link", ShortCode: "demo"})
+        </section>
+
+        <script>
+            function qrLanding() {
+                return {
+                    phase: 'landing',
+                    showTitle: true,
+                    userUrl: '',
+                    submit() {
+                        const url = this.userUrl && this.userUrl.trim();
+                        if (!url) return;
+                        // 1) Fade out title first (200ms)
+                        this.showTitle = false;
+                        // 2) After fade, move input towards top (300ms via margin change)
+                        setTimeout(() => { this.phase = 'qr'; }, 200);
+                        window.__qrLastUrl = url;
+                        // 3) Notify QR section after movement completes
+                        setTimeout(() => {
+                            window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));
+                        }, 200 + 300);
+                    },
+                    resubmit() {
+                        const url = this.userUrl && this.userUrl.trim();
+                        if (!url) return;
+                        window.__qrLastUrl = url;
+                        window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));
+                    }
+                }
+            }
+        </script>
+    </div>
+}
+
+// HomePage renders the landing and QR UI inside the base layout
+templ HomePage() {
+    @layouts.Layout("qrcreator.link – Create QR codes", homeContent())
+}

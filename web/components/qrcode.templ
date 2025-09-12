@@ -1,0 +1,537 @@
+package components
+
+import (
+    "fmt"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/card"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/label"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/separator"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/icon"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/tabs"
+    // removed slider: preview size fixed to default
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/radio"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/checkbox"
+)
+
+templ QRCodeSection(link LinkData) {
+    <div 
+        class="space-y-6 relative"
+        x-data="qrCodeTabManager()"
+        x-init={ fmt.Sprintf("(() => { if (window.__qrLastUrl) { setUrl(window.__qrLastUrl); initializeQR(); } else { setUrl('https://%s/%s') } })()", link.Domain, link.ShortCode) }
+        x-show="true"
+        @tab-changed.window="handleTabChange($event.detail)"
+        @set-qr-url.window="$event && console.debug('[QRUI] event set-qr-url', $event.detail); setUrl($event.detail); initializeQR(); updateQRCode();"
+    >
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="space-y-6">
+                @card.Card() {
+                    @card.Header() {
+                        @card.Title() { Customization Options }
+                    }
+                    @card.Content() {
+                        <div class="space-y-6">
+                            <div>
+                                @label.Label() { Color Mode }
+                                <div class="mt-2">
+                                    @tabs.Tabs(tabs.Props{Class: "analytics-tabs"}) {
+                                        @tabs.List(tabs.ListProps{Class: "w-full"}) {
+                                            @tabs.Trigger(tabs.TriggerProps{
+                                                Value: "flat",
+                                                IsActive: true,
+                                                Attributes: templ.Attributes{"@click": "settings.colorMode = 'flat'; updateQRCode()"},
+                                            }) { Flat }
+                                            @tabs.Trigger(tabs.TriggerProps{
+                                                Value: "gradient",
+                                                IsActive: false,
+                                                Attributes: templ.Attributes{"@click": "settings.colorMode = 'gradient'; updateQRCode()"},
+                                            }) { Gradient }
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                            <template x-if="settings.colorMode === 'flat'">
+                                <div x-cloak class="space-y-4">
+                                    <div>
+                                        @label.Label() { Foreground }
+                                        <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer mt-2" x-model="settings.foregroundColor" @change="updateQRCode()" />
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center justify-between mb-2">
+                                            @label.Label() { Background }
+                                            <div class="flex items-center space-x-2">
+                                                @checkbox.Checkbox(checkbox.Props{
+                                                    ID: "transparent-bg",
+                                                    Name: "transparentBackground",
+                                                    Attributes: templ.Attributes{
+                                                        "x-model": "settings.transparentBackground",
+                                                        "@change": "updateQRCode()",
+                                                    },
+                                                })
+                                                <label for="transparent-bg" class="text-xs text-gray-600 dark:text-gray-400 cursor-pointer whitespace-nowrap">Transparent</label>
+                                            </div>
+                                        </div>
+                                        <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer transition-opacity" x-model="settings.backgroundColor" x-bind:disabled="settings.transparentBackground" x-bind:class="{ 'opacity-50 cursor-not-allowed': settings.transparentBackground }" @change="updateQRCode()" />
+                                    </div>
+                                </div>
+                            </template>
+                            <template x-if="settings.colorMode === 'gradient'">
+                                <div x-cloak class="space-y-6">
+                                    <div>
+                                        @label.Label() { Foreground Gradient }
+                                        <div class="grid grid-cols-3 gap-3 mt-2">
+                                            <div>
+                                                @label.Label() { Start }
+                                                <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer" x-model="settings.gradientStart" @change="updateQRCode()" />
+                                            </div>
+                                            <div>
+                                                @label.Label() { Middle }
+                                                <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer" x-model="settings.gradientMiddle" @change="updateQRCode()" />
+                                            </div>
+                                            <div>
+                                                @label.Label() { End }
+                                                <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer" x-model="settings.gradientEnd" @change="updateQRCode()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        @label.Label() { Background Color }
+                                        <div class="relative mt-2">
+                                            <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer transition-opacity" x-model="settings.backgroundColor" x-bind:disabled="settings.transparentBackground" x-bind:class="{ 'opacity-50 cursor-not-allowed': settings.transparentBackground }" @change="updateQRCode()" />
+                                            <div class="flex items-center space-x-2 mt-2">
+                                                @checkbox.Checkbox(checkbox.Props{
+                                                    ID: "transparent-bg-gradient",
+                                                    Name: "transparentBackground",
+                                                    Attributes: templ.Attributes{
+                                                        "x-model": "settings.transparentBackground",
+                                                        "@change": "updateQRCode()",
+                                                    },
+                                                })
+                                                <label for="transparent-bg-gradient" class="text-xs text-gray-600 dark:text-gray-400 cursor-pointer">Transparent</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+
+                            @separator.Separator()
+
+                            <div class="space-y-4">
+                                @label.Label() { Frame Style }
+                                <div class="mt-2">
+                                    @tabs.Tabs(tabs.Props{Class: "analytics-tabs"}) {
+                                        @tabs.List(tabs.ListProps{Class: "w-full"}) {
+                                            @tabs.Trigger(tabs.TriggerProps{Value: "none", IsActive: true, Attributes: templ.Attributes{"@click": "settings.cornerStyle = 'none'; updateQRCode()"}}) { None }
+                                            @tabs.Trigger(tabs.TriggerProps{Value: "straight", Attributes: templ.Attributes{"@click": "settings.cornerStyle = 'straight'; updateQRCode()"}}) { Straight }
+                                            @tabs.Trigger(tabs.TriggerProps{Value: "rounded", Attributes: templ.Attributes{"@click": "settings.cornerStyle = 'rounded'; updateQRCode()"}}) { Rounded }
+                                        }
+                                    }
+                                </div>
+                                <div x-show="settings.cornerStyle !== 'none'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-2" class="space-y-2">
+                                    <div class="text-sm font-medium text-gray-700 dark:text-gray-300">Border Pattern</div>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.borderPattern === 'simple' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                            @radio.Radio(radio.Props{Name: "borderPattern", Value: "simple", Checked: true, Class: "hidden", Attributes: templ.Attributes{"@change": "settings.borderPattern = 'simple'; updateQRCode()"}})
+                                            <div class="w-6 h-6 border-2 border-gray-800 dark:border-gray-200"></div>
+                                            <div class="text-xs font-medium">Simple</div>
+                                        </label>
+                                        <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.borderPattern === 'irregular' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                            @radio.Radio(radio.Props{Name: "borderPattern", Value: "irregular", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.borderPattern = 'irregular'; updateQRCode()"}})
+                                            <div class="w-6 h-6 relative overflow-hidden grid place-items-center">
+                                                <svg class="w-full h-full" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 2 L5 1.8 L9 2.2 L13 1.9 L17 2.1 L21 1.8 L23 2" stroke="currentColor" stroke-width="1.5" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                    <path d="M2 2.8 L6 2.6 L10 3 L14 2.7 L18 2.9 L22 2.6" stroke="currentColor" stroke-width="0.8" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                    <path d="M22 2 L22.2 6 L21.8 10 L22.1 14 L21.9 18 L22.2 22" stroke="currentColor" stroke-width="1.5" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                    <path d="M21.2 3 L21.4 7 L21 11 L21.3 15 L21.1 19 L21.4 21" stroke="currentColor" stroke-width="0.8" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                    <path d="M22 22 L18 22.2 L14 21.8 L10 22.1 L6 21.9 L2 22.2 L1 22" stroke="currentColor" stroke-width="1.5" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                    <path d="M21 21.2 L17 21.4 L13 21 L9 21.3 L5 21.1 L2 21.4" stroke="currentColor" stroke-width="0.8" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                    <path d="M2 2 L2.2 6 L1.8 10 L2.1 14 L1.9 18 L2.2 22" stroke="currentColor" stroke-width="1.5" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                    <path d="M3 3 L3.2 7 L2.8 11 L3.1 15 L2.9 19 L3.2 21" stroke="currentColor" stroke-width="0.8" fill="none" class="text-gray-800 dark:text-gray-200" />
+                                                </svg>
+                                            </div>
+                                            <div class="text-xs font-medium">Irregular</div>
+                                        </label>
+                                        <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.borderPattern === 'dashed' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                            @radio.Radio(radio.Props{Name: "borderPattern", Value: "dashed", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.borderPattern = 'dashed'; updateQRCode()"}})
+                                            <div class="w-6 h-6 border-2 border-dashed border-gray-800 dark:border-gray-200"></div>
+                                            <div class="text-xs font-medium">Dashed</div>
+                                        </label>
+                                        <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.borderPattern === 'grid' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                            @radio.Radio(radio.Props{Name: "borderPattern", Value: "grid", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.borderPattern = 'grid'; updateQRCode()"}})
+                                            <div class="w-6 h-6 border-2 border-gray-800 dark:border-gray-200 relative overflow-hidden">
+                                                <div class="absolute inset-0 grid grid-cols-3 grid-rows-3 gap-px">
+                                                    <div class="bg-gray-800 dark:bg-gray-200"></div>
+                                                    <div></div>
+                                                    <div class="bg-gray-800 dark:bg-gray-200"></div>
+                                                    <div></div>
+                                                    <div class="bg-gray-800 dark:bg-gray-200"></div>
+                                                    <div></div>
+                                                    <div class="bg-gray-800 dark:bg-gray-200"></div>
+                                                    <div></div>
+                                                    <div class="bg-gray-800 dark:bg-gray-200"></div>
+                                                </div>
+                                            </div>
+                                            <div class="text-xs font-medium">Grid</div>
+                                        </label>
+                                        <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.borderPattern === 'double' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                            @radio.Radio(radio.Props{Name: "borderPattern", Value: "double", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.borderPattern = 'double'; updateQRCode()"}})
+                                            <div class="w-6 h-6 border-4 border-double border-gray-800 dark:border-gray-200"></div>
+                                            <div class="text-xs font-medium">Double</div>
+                                        </label>
+                                        <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.borderPattern === 'diagonal' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                            @radio.Radio(radio.Props{Name: "borderPattern", Value: "diagonal", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.borderPattern = 'diagonal'; updateQRCode()"}})
+                                            <div class="w-6 h-6 relative overflow-hidden border-2 border-gray-800 dark:border-gray-200">
+                                                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 23 L23 1" stroke="currentColor" stroke-width="3" class="text-gray-800 dark:text-gray-200" />
+                                                </svg>
+                                            </div>
+                                            <div class="text-xs font-medium">Diagonal</div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div x-show="settings.cornerStyle !== 'none'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform translate-y-0" x-transition:leave-end="opacity-0 transform translate-y-2" class="space-y-2">
+                                    <div class="flex items-center justify-between mb-2">
+                                        @label.Label() { Border }
+                                        <div class="flex items-center space-x-2">
+                                            @checkbox.Checkbox(checkbox.Props{ID: "same-color-border", Name: "sameColorBorder", Attributes: templ.Attributes{"x-model": "settings.sameColorBorder", "@change": "updateQRCode()"}})
+                                            <label for="same-color-border" class="text-xs text-gray-600 dark:text-gray-400 cursor-pointer whitespace-nowrap">Same as QR</label>
+                                        </div>
+                                    </div>
+                                    <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer transition-opacity" x-model="settings.borderColor" x-bind:disabled="settings.sameColorBorder" x-bind:class="{ 'opacity-50 cursor-not-allowed': settings.sameColorBorder }" @change="updateQRCode()" />
+                                </div>
+                            </div>
+
+                            @separator.Separator()
+
+                            <div class="space-y-4">
+                                @label.Label() { QR Style }
+                                <div class="space-y-3">
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Shape</div>
+                                        <div class="grid grid-cols-3 gap-2">
+                                            <!-- Rectangle -->
+                                            <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.qrShape === 'rectangle' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                                @radio.Radio(radio.Props{Name: "qrShape", Value: "rectangle", Checked: true, Class: "hidden", Attributes: templ.Attributes{"@change": "settings.qrShape = 'rectangle'; updateQRCode()"}})
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="2" y="2" width="6" height="6" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="16" y="2" width="6" height="6" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="2" y="9" width="6" height="6" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="9" y="9" width="6" height="6" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="9" y="16" width="6" height="6" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="16" y="16" width="6" height="6" class="fill-gray-800 dark:fill-gray-200" />
+                                                </svg>
+                                                <div class="text-xs font-medium">Rectangle</div>
+                                            </label>
+
+                                            <!-- Circle -->
+                                            <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.qrShape === 'circle' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                                @radio.Radio(radio.Props{Name: "qrShape", Value: "circle", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.qrShape = 'circle'; updateQRCode()"}})
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="5" cy="5" r="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <circle cx="19" cy="5" r="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <circle cx="5" cy="12" r="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <circle cx="12" cy="12" r="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <circle cx="12" cy="19" r="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <circle cx="19" cy="19" r="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                </svg>
+                                                <div class="text-xs font-medium">Circle</div>
+                                            </label>
+
+                                            <!-- Liquid (copy from example) -->
+                                            <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.qrShape === 'liquid' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                                @radio.Radio(radio.Props{Name: "qrShape", Value: "liquid", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.qrShape = 'liquid'; updateQRCode()"}})
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <!-- L-shaped connection with very rounded corners -->
+                                                    <path d="M 5 2 L 5 2 Q 8 2 8 5 L 8 4 Q 8 9 11 9 L 12 9 Q 15 9 15 12 L 15 12 Q 15 15 12 15 L 5 15 Q 2 15 2 12 L 2 5 Q 2 2 5 2 Z" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <!-- Top right circle -->
+                                                    <circle cx="19" cy="5" r="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <!-- Bottom center and right connected squares with rounded corners -->
+                                                    <path d="M 12 16 L 19 16 Q 22 16 22 19 L 22 19 Q 22 22 19 22 L 12 22 Q 9 22 9 19 L 9 19 Q 9 16 12 16 Z" class="fill-gray-800 dark:fill-gray-200" />
+                                                </svg>
+                                                <div class="text-xs font-medium">Liquid</div>
+                                            </label>
+
+                                            <!-- Chain (copy from example) -->
+                                            <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.qrShape === 'chain' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                                @radio.Radio(radio.Props{Name: "qrShape", Value: "chain", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.qrShape = 'chain'; updateQRCode()"}})
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <!-- Row 1: fill empty fill -->
+                                                    <circle cx="5" cy="5" r="2" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <circle cx="19" cy="5" r="2" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <!-- Vertical connection between top-left and middle-left -->
+                                                    <line x1="5" y1="7" x2="5" y2="10" class="stroke-gray-800 dark:stroke-gray-200" stroke-width="1.5" />
+                                                    <!-- Row 2: fill fill empty - with connection -->
+                                                    <circle cx="5" cy="12" r="2" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <line x1="7" y1="12" x2="10" y2="12" class="stroke-gray-800 dark:stroke-gray-200" stroke-width="1.5" />
+                                                    <circle cx="12" cy="12" r="2" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <!-- Row 3: empty fill fill - with connection -->
+                                                    <circle cx="12" cy="19" r="2" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <line x1="14" y1="19" x2="17" y2="19" class="stroke-gray-800 dark:stroke-gray-200" stroke-width="1.5" />
+                                                    <circle cx="19" cy="19" r="2" class="fill-gray-800 dark:fill-gray-200" />
+                                                </svg>
+                                                <div class="text-xs font-medium">Chain</div>
+                                            </label>
+
+                                            <!-- H-Stripe (copy from example, value hstripe) -->
+                                            <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.qrShape === 'hstripe' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                                @radio.Radio(radio.Props{Name: "qrShape", Value: "hstripe", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.qrShape = 'hstripe'; updateQRCode()"}})
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="2" y="2" width="20" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="2" y="6" width="12" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="16" y="6" width="6" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="2" y="10" width="8" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="12" y="10" width="10" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="2" y="14" width="16" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="2" y="18" width="10" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="14" y="18" width="8" height="3" class="fill-gray-800 dark:fill-gray-200" />
+                                                </svg>
+                                                <div class="text-xs font-medium">H-Stripe</div>
+                                            </label>
+
+                                            <!-- V-Stripe (copy from example, value vstripe) -->
+                                            <label class="p-2 rounded-md border cursor-pointer grid gap-1 place-items-center" x-bind:class="settings.qrShape === 'vstripe' ? 'border-gray-900 dark:border-gray-100 ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'">
+                                                @radio.Radio(radio.Props{Name: "qrShape", Value: "vstripe", Class: "hidden", Attributes: templ.Attributes{"@change": "settings.qrShape = 'vstripe'; updateQRCode()"}})
+                                                <svg class="w-6 h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="2" y="2" width="3" height="20" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="6" y="2" width="3" height="12" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="6" y="16" width="3" height="6" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="10" y="2" width="3" height="8" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="10" y="12" width="3" height="10" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="14" y="2" width="3" height="16" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="18" y="2" width="3" height="10" class="fill-gray-800 dark:fill-gray-200" />
+                                                    <rect x="18" y="14" width="3" height="8" class="fill-gray-800 dark:fill-gray-200" />
+                                                </svg>
+                                                <div class="text-xs font-medium">V-Stripe</div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <div class="space-y-6 lg:col-span-2">
+                @card.Card(card.Props{Class: "relative"}) {
+                    @card.Header() { @card.Title() { QR Preview } }
+                    @card.Content() {
+                        <div class="flex flex-col lg:flex-row gap-6">
+                            <div class="w-full lg:w-auto flex flex-col items-center">
+                                <div class="relative" x-data="{ observer: null }" x-init="observer = new IntersectionObserver((entries) => { if (entries[0].isIntersecting) { initializeQR(); observer.disconnect(); } }, { threshold: 0.2 }); observer.observe($refs.previewContainer);">
+                                    <div class="flex items-center justify-center bg-transparent"
+                                         x-ref="previewContainer"
+                                         x-bind:style="'width:290px;height:290px'">
+                                        <img alt="QR Preview" class="max-w-full max-h-full shadow-lg" x-bind:src="previewImageUrl" @load="console.debug('[QRUI] preview loaded', $event.target.naturalWidth+'x'+$event.target.naturalHeight)" @error="console.error('[QRUI] preview error', $event)" />
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="w-full space-y-4">
+                                <div class="grid grid-cols-2 gap-3">
+                                    @button.Button(button.Props{Class: "w-full", Attributes: templ.Attributes{"@click": "download('PNG')", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) {
+                                        <template x-if="isDownloading && downloadingFormat === 'PNG'">
+                                            <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        </template>
+                                        <template x-if="!isDownloading || downloadingFormat !== 'PNG'">
+                                            @icon.Icon("download")(icon.Props{Size: 16, Class: "mr-2"})
+                                        </template>
+                                        <span x-text="isDownloading && downloadingFormat === 'PNG' ? 'Generating PNG...' : 'Download PNG'">Download PNG</span>
+                                    }
+                                    @button.Button(button.Props{Class: "w-full", Variant: button.VariantSecondary, Attributes: templ.Attributes{"@click": "isSVGAvailable ? download('SVG') : showSVGLimitation()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) {
+                                        <template x-if="isDownloading && downloadingFormat === 'SVG'">
+                                            <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        </template>
+                                        <template x-if="!isDownloading || downloadingFormat !== 'SVG'">
+                                            @icon.Icon("download")(icon.Props{Size: 16, Class: "mr-2"})
+                                        </template>
+                                        <span x-text="isDownloading && downloadingFormat === 'SVG' ? 'Generating SVG...' : 'Download SVG'">Download SVG</span>
+                                    }
+                                </div>
+                                <div x-show="showSVGTooltip" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50" @click.away="showSVGTooltip = false">
+                                    <div class="px-4 py-1 bg-gray-900 dark:bg-gray-700 text-white rounded-lg shadow-lg max-w-xs text-sm border border-gray-800 dark:border-gray-600">
+                                        <div class="font-medium mb-1">SVG Not Available</div>
+                                        <div class="text-xs opacity-90">SVG download is only available with flat colors and simple frame styles. Please change your settings to use SVG format.</div>
+                                    </div>
+                                </div>
+                                @button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "copyQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) { @icon.Icon("copy")(icon.Props{Size: 16, Class: "mr-2"}) Copy to Clipboard }
+                                @button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "shareQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) { @icon.Icon("share")(icon.Props{Size: 16, Class: "mr-2"}) Share QR Code }
+                            </div>
+                        </div>
+                    }
+                }
+
+                @card.Card() {
+                    @card.Header() { @card.Title() { Embed QR Code } }
+                    @card.Content() {
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    @label.Label() { HTML Embed }
+                                    @button.Button(button.Props{Variant: button.VariantGhost, Size: button.SizeIcon, Attributes: templ.Attributes{"@click": "copyEmbed()"}}) { @icon.Icon("copy")(icon.Props{Size: 14}) }
+                                </div>
+                                <textarea readonly rows="2" class="w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" x-model="embedCode"></textarea>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    @label.Label() { Direct Image URL }
+                                    @button.Button(button.Props{Variant: button.VariantGhost, Size: button.SizeIcon, Attributes: templ.Attributes{"@click": "copyDirectUrl()"}}) { @icon.Icon("copy")(icon.Props{Size: 14}) }
+                                </div>
+                                <textarea readonly rows="2" class="w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" x-model="directImageUrl"></textarea>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+        @tabs.Script()
+            <!-- Removed slider script since preview size is fixed -->
+
+        <script>
+            function qrCodeTabManager() {
+                return {
+                    url: '',
+                    previewSize: 528,
+                    previewImageUrl: '',
+                    settings: {
+                        colorMode: 'flat',
+                        foregroundColor: '#000000',
+                        backgroundColor: '#ffffff',
+                        transparentBackground: false,
+                        gradientStart: '#000000',
+                        gradientMiddle: '#808080',
+                        gradientEnd: '#ff0000',
+                        cornerStyle: 'none',
+                        borderPattern: 'simple',
+                        borderColor: '#000000',
+                        sameColorBorder: true,
+                        qrShape: 'rectangle',
+                        removeBranding: false,
+                        enableLogo: false,
+                        logoFile: null
+                    },
+                    embedCode: '',
+                    directImageUrl: '',
+                    updateTimeout: null,
+                    initialized: false,
+                    isDownloading: false,
+                    downloadingFormat: '',
+                    showSVGTooltip: false,
+                    get isSVGAvailable() {
+                        return this.settings.colorMode === 'flat' && (this.settings.cornerStyle === 'none' || this.settings.borderPattern === 'simple');
+                    },
+                    showSVGLimitation() {
+                        this.showSVGTooltip = true;
+                        setTimeout(() => { this.showSVGTooltip = false; }, 3000);
+                    },
+                    setUrl(linkUrl) { this.url = linkUrl; console.debug('[QRUI] setUrl', linkUrl); },
+                    initializeQR() {
+                        if (!this.initialized && this.url) {
+                            this.initialized = true;
+                            this.updateQRCode();
+                            this.updateEmbedCode();
+                        }
+                    },
+                    handleTabChange(tabValue) { if (tabValue === 'qr') { this.initializeQR(); } },
+                    updateQRCode() {
+                        if (!this.initialized) return;
+                        if (this.updateTimeout) { clearTimeout(this.updateTimeout); }
+                        this.updateTimeout = setTimeout(() => {
+                            this.updateEmbedCode();
+                            this.updateDirectUrl();
+                            console.debug('[QRUI] load preview');
+                            this.loadQRPreview();
+                        }, 150);
+                    },
+                    updateEmbedCode() {
+                        const params = this.buildQRParams('download');
+                        this.embedCode = `<img src="${window.location.origin}/api/qr?${params}" alt="QR Code" style="max-width: 100%; height: auto;" />`;
+                    },
+                    updateDirectUrl() {
+                        const params = this.buildQRParams('download');
+                        this.directImageUrl = `${window.location.origin}/api/qr?${params}`;
+                        console.debug('[QRUI] direct url', this.directImageUrl);
+                    },
+                    buildQRParams(size = 'preview') {
+                        const params = new URLSearchParams({
+                            url: this.url,
+                            colorMode: this.settings.colorMode,
+                            cornerStyle: this.settings.cornerStyle,
+                            borderPattern: this.settings.borderPattern,
+                            qrShape: this.settings.qrShape,
+                            size: size
+                        });
+                        if (this.settings.removeBranding) { params.set('branding', 'none'); } else { params.set('branding', 'default'); }
+                        if (this.settings.enableLogo && this.settings.logoFile) {
+                            params.set('centerLogo', 'true');
+                            if (typeof this.settings.logoFile === 'string') { params.set('logoFile', this.settings.logoFile); }
+                        }
+                        if (this.settings.transparentBackground) { params.set('bg', 'transparent'); } else { params.set('bg', this.settings.backgroundColor.replace('#', '')); }
+                        if (this.settings.colorMode === 'flat') {
+                            params.set('fg', this.settings.foregroundColor.replace('#', ''));
+                        } else {
+                            params.set('gradientStart', this.settings.gradientStart.replace('#', ''));
+                            params.set('gradientMiddle', this.settings.gradientMiddle.replace('#', ''));
+                            params.set('gradientEnd', this.settings.gradientEnd.replace('#', ''));
+                        }
+                        if (this.settings.cornerStyle !== 'none') {
+                            if (!this.settings.sameColorBorder) { params.set('borderColor', this.settings.borderColor.replace('#', '')); }
+                            params.set('borderPattern', this.settings.borderPattern);
+                        }
+                        params.set('previewSize', this.previewSize.toString());
+                        return params.toString();
+                    },
+                    async loadQRPreview() {
+                        try {
+                            const params = this.buildQRParams('preview');
+                            const url = `/api/qr?${params}`;
+                            this.previewImageUrl = url;
+                            console.debug('[QRUI] preview url', url);
+                        } catch (e) { console.error('Preview error:', e); }
+                    },
+                    async download(format) {
+                        try {
+                            this.isDownloading = true; this.downloadingFormat = format;
+                            const params = this.buildQRParams('download');
+                            const response = await fetch(`/api/qr?${params}`);
+                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a'); a.href = url; a.download = `qr.${format.toLowerCase()}`; a.click(); window.URL.revokeObjectURL(url);
+                        } catch (e) { console.error('Download error:', e); }
+                        finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }
+                    },
+                    async copyQR() {
+                        try {
+                            this.isDownloading = true; this.downloadingFormat = 'PNG';
+                            const params = this.buildQRParams('download');
+                            const response = await fetch(`/api/qr?${params}`);
+                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                            const blob = await response.blob();
+                            await navigator.clipboard.write([ new ClipboardItem({ [blob.type]: blob }) ]);
+                            this.showToast('Success', 'QR code copied to clipboard!', 'success');
+                        } catch (e) { console.error('Copy error:', e); this.showToast('Error', 'Failed to copy QR code', 'error'); }
+                        finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }
+                    },
+                    copyEmbed() { navigator.clipboard.writeText(this.embedCode); this.showToast('Success', 'Embed code copied to clipboard!', 'success'); },
+                    copyDirectUrl() { navigator.clipboard.writeText(this.directImageUrl); this.showToast('Success', 'Direct URL copied to clipboard!', 'success'); },
+                    shareQR() { if (typeof openQRShareModal === 'function') { openQRShareModal(this.directImageUrl, 'Check out this QR code'); } },
+                    showToast(title, description, variant) {
+                        const form = document.createElement('form'); form.style.display = 'none';
+                        const ti = document.createElement('input'); ti.name = 'title'; ti.value = title; form.appendChild(ti);
+                        const di = document.createElement('input'); di.name = 'description'; di.value = description; form.appendChild(di);
+                        const vi = document.createElement('input'); vi.name = 'variant'; vi.value = variant; form.appendChild(vi);
+                        const ds = document.createElement('input'); ds.name = 'dismissible'; ds.value = 'on'; form.appendChild(ds);
+                        document.body.appendChild(form);
+                        if (window.htmx) { htmx.ajax('POST', '/api/htmx/toast', { source: form, target: '#toast-container', swap: 'afterbegin' }); }
+                        document.body.removeChild(form);
+                    },
+                }
+            }
+            // Minimal stub to avoid errors if not defined elsewhere
+            window.openQRShareModal = window.openQRShareModal || function(url, text){ try { navigator.share && navigator.share({ url, text }); } catch(e){} };
+        </script>
+    </div>
+}

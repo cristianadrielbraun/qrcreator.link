@@ -1,0 +1,3 @@
+./galois_field.go
+./polynomial.go
+./reedsolomon.go

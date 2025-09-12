@@ -1,0 +1,7 @@
+{
+  "componentsDir": "web/components/ui",
+  "utilsDir": "web/utils",
+  "moduleName": "qrcreator.link",
+  "jsDir": "web/static/js",
+  "jsPublicPath": "web/static/js"
+}

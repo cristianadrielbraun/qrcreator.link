@@ -1,0 +1,7 @@
+./buffer.go
+./bufferpool.go
+./builder.go
+./runtime.go
+./scriptelement.go
+./styleattribute.go
+./watchmode.go

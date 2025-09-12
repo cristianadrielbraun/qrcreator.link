@@ -1,0 +1,7 @@
+./class-utils.go
+./config.go
+./create-tailwind-merge.go
+./default-config.go
+./merge-classlist.go
+./modifier-utils.go
+./validators.go
