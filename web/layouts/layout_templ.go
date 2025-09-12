@@ -9,7 +9,9 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	toast "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/toast"
+	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/popover"
+	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/tabs"
+	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/toast"
 )
 
 // Layout renders the base HTML skeleton with Tailwind and a simple header.
@@ -41,7 +43,7 @@ func Layout(title string, children templ.Component) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/layouts/layout.templ`, Line: 14, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/layouts/layout.templ`, Line: 16, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -52,6 +54,14 @@ func Layout(title string, children templ.Component) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = toast.Script().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = tabs.Script().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = popover.Script().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

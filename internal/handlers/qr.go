@@ -6,7 +6,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
-	_ "image/jpeg"
+	"image/jpeg"
 	"image/png"
 	"io"
 	"math"
@@ -44,7 +44,8 @@ func (h *Handler) QRCodeHandler(c *gin.Context) {
 
     // Parse format parameter (default to PNG)
     format := strings.ToLower(c.DefaultQuery("format", "png"))
-    if format != "png" && format != "svg" {
+    if format == "jpeg" { format = "jpg" }
+    if format != "png" && format != "svg" && format != "jpg" {
         format = "png"
     }
 
@@ -149,7 +150,7 @@ func (h *Handler) QRCodeHandler(c *gin.Context) {
 			endColor = parseColorParam(c.Query("gradientEnd"), color.RGBA{255, 0, 0, 255})
 		}
 		h.generateSVGQR(c, qrc, useGradient, gradient, fgColor, gradientStartColor, bgColor, startColor, middleColor, endColor, borderColor, border, frame, frameWidthPercent, size, qrShape, branding, customDomain, centerLogo, logoFile)
-	} else {
+    } else {
 		// Generate PNG format (default)
 		// Pass gradient colors if available
 		var startColor, middleColor, endColor color.RGBA
@@ -159,13 +160,14 @@ func (h *Handler) QRCodeHandler(c *gin.Context) {
 			endColor = parseColorParam(c.Query("gradientEnd"), color.RGBA{255, 0, 0, 255})
 		}
         // Add debug header for quick inspection from devtools
-        c.Header("X-QR-Debug", fmt.Sprintf("format=png;size=%s;shape=%s;colorMode=%s", size, qrShape, colorMode))
-        h.generatePNGQR(c, qrc, useGradient, gradient, fgColor, gradientStartColor, bgColor, startColor, middleColor, endColor, borderColor, border, frame, frameWidthPercent, size, qrShape, branding, customDomain, centerLogo, logoFile)
+        outFmt := format // png or jpg
+        c.Header("X-QR-Debug", fmt.Sprintf("format=%s;size=%s;shape=%s;colorMode=%s", outFmt, size, qrShape, colorMode))
+        h.generatePNGQR(c, qrc, useGradient, gradient, fgColor, gradientStartColor, bgColor, startColor, middleColor, endColor, borderColor, border, frame, frameWidthPercent, size, qrShape, branding, customDomain, centerLogo, logoFile, outFmt)
     }
 }
 
 // generatePNGQR generates a PNG QR code
-func (h *Handler) generatePNGQR(c *gin.Context, qrc *qrcode.QRCode, useGradient bool, gradient *standard.LinearGradient, fgColor, gradientStartColor, bgColor color.RGBA, gradientStart, gradientMiddle, gradientEnd color.RGBA, borderColor color.RGBA, border int, frame string, frameWidthPercent int, size string, qrShape string, branding string, customDomain string, centerLogo string, logoFile string) {
+func (h *Handler) generatePNGQR(c *gin.Context, qrc *qrcode.QRCode, useGradient bool, gradient *standard.LinearGradient, fgColor, gradientStartColor, bgColor color.RGBA, gradientStart, gradientMiddle, gradientEnd color.RGBA, borderColor color.RGBA, border int, frame string, frameWidthPercent int, size string, qrShape string, branding string, customDomain string, centerLogo string, logoFile string, outputFormat string) {
 	// Create unique temporary file for PNG output
 	tmpFile := filepath.Join(os.TempDir(), generateUniqueFilename("qr", ".png"))
 
@@ -372,7 +374,7 @@ func (h *Handler) generatePNGQR(c *gin.Context, qrc *qrcode.QRCode, useGradient 
 		return
 	}
 
-    // Read the file and send it
+    // Read the file and send it as requested format
     file, err := os.Open(tmpFile)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to read QR code file: %v", err)})
@@ -381,17 +383,39 @@ func (h *Handler) generatePNGQR(c *gin.Context, qrc *qrcode.QRCode, useGradient 
     defer file.Close()
     defer os.Remove(tmpFile) // Clean up temp file
 
-    // Set headers for PNG image
-    c.Header("Content-Type", "image/png")
     c.Header("Cache-Control", "public, max-age=3600") // Cache for 1 hour
 
-    // Copy file content to response
-    n, err := io.Copy(c.Writer, file)
-    fmt.Printf("[QR] sent PNG bytes=%d size=%s shape=%s\n", n, size, qrShape)
-    if err != nil {
+    if outputFormat == "jpg" {
+        // Decode PNG, composite onto opaque background, encode JPEG
+        img, _, err := image.Decode(file)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to decode QR image: %v", err)})
+            return
+        }
+        // Create opaque background using selected bgColor (fallback to white)
+        bg := color.RGBA{bgColor.R, bgColor.G, bgColor.B, 255}
+        if bgColor.A == 0 { bg = color.RGBA{255, 255, 255, 255} }
+        outBounds := img.Bounds()
+        out := image.NewRGBA(outBounds)
+        draw.Draw(out, outBounds, &image.Uniform{C: bg}, image.Point{}, draw.Src)
+        draw.Draw(out, outBounds, img, outBounds.Min, draw.Over)
+
+        c.Header("Content-Type", "image/jpeg")
+        if err := jpeg.Encode(c.Writer, out, &jpeg.Options{Quality: 92}); err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to encode JPEG: %v", err)})
+            return
+        }
+        fmt.Printf("[QR] sent JPG size=%s shape=%s\n", size, qrShape)
+        return
+    }
+
+    // Default: stream PNG bytes
+    c.Header("Content-Type", "image/png")
+    if _, err := io.Copy(c.Writer, file); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send QR code"})
         return
     }
+    fmt.Printf("[QR] sent PNG size=%s shape=%s\n", size, qrShape)
 }
 
 // generateSVGQR generates a true vector SVG QR code

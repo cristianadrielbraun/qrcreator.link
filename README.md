@@ -1,6 +1,28 @@
 Source code of qrcreator.link site made with Go + templ, using Tailwind, HTMX, AlpineJS, templui for components.
 The service is up & running in [qrcreator.link](https://qrcreator.link)
 
+In case you didn't figure it out yet, it's a QR creator website.
+
+
+## Showcase
+
+Below are some screenshots of the QR generator UI and outputs.
+
+<p align="center">
+  <strong>Website UI</strong><br/>
+  <img src="screenshots/site_screenshot1.png" alt="Site UI screenshot 1" width="440" />
+  <img src="screenshots/site_screenshot2.png" alt="Site UI screenshot 2" width="440" />
+</p>
+
+<p align="center">
+  <strong>Generated QR Samples</strong><br/>
+  <img src="screenshots/qr1.png" alt="QR example 1" width="150" />
+  <img src="screenshots/qr2.png" alt="QR example 2" width="150" />
+  <img src="screenshots/qr3.png" alt="QR example 3" width="150" />
+  <img src="screenshots/qr4.png" alt="QR example 4" width="150" />
+  <img src="screenshots/qr5.png" alt="QR example 5" width="150" />
+</p>
+
 ## Quick Run
 
 If you want to simply download and run, you can:
@@ -79,4 +101,3 @@ The project relies on these main external libraries and tools:
   - Tailwind CSS: https://tailwindcss.com — styling (prebuilt CSS is included under `web/static/css`)
   - HTMX: https://htmx.org — lightweight interactivity for a few UI actions
   - Alpine.js: https://alpinejs.dev — small reactive state for the QR preview UI
-

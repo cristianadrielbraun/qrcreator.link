@@ -8,9 +8,9 @@ import (
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/separator"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/icon"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/tabs"
-    // removed slider: preview size fixed to default
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/radio"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/checkbox"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/tooltip"
 )
 
 templ QRCodeSection(link LinkData) {
@@ -349,6 +349,27 @@ templ QRCodeSection(link LinkData) {
                                     </template>
                                     <span x-text="isDownloading && downloadingFormat === 'PNG' ? 'Generating PNG...' : 'Download PNG'">Download PNG</span>
                                 }
+                                @button.Button(button.Props{FullWidth: true, Class: "border", Attributes: templ.Attributes{"@click": "download('JPG')", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) {
+                                    <template x-if="isDownloading && downloadingFormat === 'JPG'">
+                                        <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    </template>
+                                    <template x-if="!isDownloading || downloadingFormat !== 'JPG'">
+                                        @icon.Icon("download")(icon.Props{Size: 16, Class: "mr-2"})
+                                    </template>
+                                    <span x-text="isDownloading && downloadingFormat === 'JPG' ? 'Generating JPG...' : 'Download JPG'">Download JPG</span>
+                                    @tooltip.Tooltip() {
+                                        @tooltip.Trigger(tooltip.TriggerProps{For: "jpg-tip", Class: "ml-2 inline-flex items-center text-slate-600 dark:text-slate-300"}) {
+                                            @icon.Icon("info")(icon.Props{Size: 14})
+                                        }
+                                        @tooltip.Content(tooltip.ContentProps{ID: "jpg-tip", Position: tooltip.PositionTop, ShowArrow: false, Class: "text-xs"}) {
+                                            <div class="text-xs leading-snug">
+                                                <div>JPG is a lossy format, and it doesn't support transparency.</div>
+                                                <div>Therefore, transparent backgrounds are flattened to white</div>
+                                                <div>For better results, consider using SVG or PNG</div>
+                                            </div>
+                                        }
+                                    }
+                                }
                                 @button.Button(button.Props{FullWidth: true, Variant: button.VariantSecondary, Class: "border bg-teal-600 hover:bg-teal-700 text-white", Attributes: templ.Attributes{"@click": "isSVGAvailable ? download('SVG') : showSVGLimitation()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) {
                                     <template x-if="isDownloading && downloadingFormat === 'SVG'">
                                         <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -366,7 +387,6 @@ templ QRCodeSection(link LinkData) {
                                 </div>
                             </div>
                             @button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "copyQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) { @icon.Icon("copy")(icon.Props{Size: 16, Class: "mr-2"}) Copy to Clipboard }
-                            @button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "shareQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}) { @icon.Icon("share")(icon.Props{Size: 16, Class: "mr-2"}) Share QR Code }
                             @separator.Separator()
                             <div class="space-y-4 pt-2">
                                 <div>
@@ -391,7 +411,7 @@ templ QRCodeSection(link LinkData) {
             </div>
         </div>
 
-        @tabs.Script()
+        
             <!-- Removed slider script since preview size is fixed -->
 
         <script>
@@ -500,7 +520,8 @@ templ QRCodeSection(link LinkData) {
                         try {
                             this.isDownloading = true; this.downloadingFormat = format;
                             const params = this.buildQRParams('download');
-                            const response = await fetch(`/api/qr?${params}`);
+                            const fmt = (format || 'PNG').toLowerCase();
+                            const response = await fetch(`/api/qr?${params}&format=${fmt}`);
                             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                             const blob = await response.blob();
                             const url = window.URL.createObjectURL(blob);

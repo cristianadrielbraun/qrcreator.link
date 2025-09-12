@@ -1,7 +1,9 @@
 package layouts
 
 import (
-    toast "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/toast"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/toast"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/tabs"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/popover"
 )
 
 // Layout renders the base HTML skeleton with Tailwind and a simple header.
@@ -19,6 +21,8 @@ templ Layout(title string, children templ.Component) {
             <script defer src="/web/static/js/vendor/htmx.min.js"></script>
             <script defer src="/web/static/js/tab-indicator.js"></script>
             @toast.Script()
+            @tabs.Script()
+            @popover.Script()
             <style>[x-cloak]{display:none !important}</style>
             <script>
                 (function() {
