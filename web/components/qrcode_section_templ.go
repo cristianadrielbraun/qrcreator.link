@@ -47,9 +47,9 @@ func QRCodeSection(link LinkData) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("(() => { if (window.__qrLastUrl) { setUrl(window.__qrLastUrl); initializeQR(); } else { setUrl('https://%s/%s') } })()", link.Domain, link.ShortCode))
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("(() => { if (window.__qrLastUrl) { setUrl(window.__qrLastUrl); initializeQR(); } else { setUrl('https://%s/%s') } setTimeout(() => window.dispatchEvent(new Event('resize')), 60); })()", link.Domain, link.ShortCode))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/qrcode_section.templ`, Line: 20, Col: 179}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/components/qrcode_section.templ`, Line: 20, Col: 244}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -1121,7 +1121,7 @@ func QRCodeSection(link LinkData) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, "</div><textarea readonly rows=\"2\" class=\"w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"embedCode\"></textarea></div><div><div class=\"flex items-center justify-between mb-2\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, "</div><textarea readonly rows=\"2\" class=\"w-full h-[120px] px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"embedCode\"></textarea></div><div><div class=\"flex items-center justify-between mb-2\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1169,7 +1169,7 @@ func QRCodeSection(link LinkData) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "</div><textarea readonly rows=\"2\" class=\"w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"directImageUrl\"></textarea></div></div></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "</div><textarea readonly rows=\"2\" class=\"w-full h-[120px] px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"directImageUrl\"></textarea></div></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

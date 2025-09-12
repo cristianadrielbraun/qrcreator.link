@@ -5,28 +5,55 @@
 (function() {
   'use strict';
 
+  // Keep lightweight retry timers per tabsId to avoid thrashing
+  const retryTimers = new Map();
+
+  function scheduleRetry(tabsId, delay = 60, tries = 5) {
+    if (tries <= 0) return;
+    if (retryTimers.has(tabsId)) clearTimeout(retryTimers.get(tabsId));
+    const t = setTimeout(() => {
+      updateTabIndicator(tabsId, false);
+      // Backoff slightly for subsequent retries
+      scheduleRetry(tabsId, Math.min(delay * 1.5, 250), tries - 1);
+    }, delay);
+    retryTimers.set(tabsId, t);
+  }
+
   function updateTabIndicator(tabsId, triggerBounce = false, previousTab = null) {
     const tabsList = document.querySelector(`[data-tui-tabs-list][data-tui-tabs-id="${tabsId}"]`);
     const activeTrigger = document.querySelector(`[data-tui-tabs-trigger][data-tui-tabs-id="${tabsId}"][data-tui-tabs-state="active"]`);
     
-    if (!tabsList || !activeTrigger) return;
+    if (!tabsList) return;
+    // If no active trigger yet, fall back to the first trigger and retry soon
+    const trigger = activeTrigger || tabsList.querySelector('[data-tui-tabs-trigger]');
+    if (!trigger) return;
 
     const triggers = tabsList.querySelectorAll('[data-tui-tabs-trigger]');
     const tabsListRect = tabsList.getBoundingClientRect();
-    const activeTriggerRect = activeTrigger.getBoundingClientRect();
-    
+    const activeTriggerRect = trigger.getBoundingClientRect();
+
+    // Prefer layout-based measures; if width is 0 (hidden/not laid out yet), retry soon
+    const width = activeTriggerRect.width || trigger.offsetWidth || trigger.scrollWidth || 0;
+    if (!width || width <= 0 || !Number.isFinite(width)) {
+      scheduleRetry(tabsId);
+      return;
+    }
+
     // Calculate position relative to tabs list container
     // Subtract the actual padding-left so this works for both default (3px)
     // and analytics cards (2px) without hard-coding values.
     const paddingLeft = parseFloat(getComputedStyle(tabsList).paddingLeft) || 0;
-    const offset = activeTriggerRect.left - tabsListRect.left - paddingLeft;
-    const width = activeTriggerRect.width;
+    const offset = (activeTriggerRect.left - tabsListRect.left - paddingLeft);
+    if (!Number.isFinite(offset)) {
+      scheduleRetry(tabsId);
+      return;
+    }
     
     // Get current position for direction calculation
     const currentOffset = parseFloat(tabsList.style.getPropertyValue('--tab-indicator-offset') || '0');
     
     // Update CSS custom properties for the sliding indicator
-    tabsList.style.setProperty('--tab-indicator-width', `${width}px`);
+    tabsList.style.setProperty('--tab-indicator-width', `${Math.max(1, Math.round(width))}px`);
     tabsList.style.setProperty('--tab-indicator-offset', `${offset}px`);
     
     // Trigger directional breathing effect if requested
@@ -106,10 +133,23 @@
 
   // Initialize when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeTabIndicators);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Defer one tick so templui tabs can mark active states first
+      requestAnimationFrame(() => initializeTabIndicators());
+    });
   } else {
-    initializeTabIndicators();
+    // DOM already parsed; still defer one frame
+    requestAnimationFrame(() => initializeTabIndicators());
   }
+
+  // As a safety net, run again after full load and nudge layout to recalc
+  window.addEventListener('load', () => {
+    // Run twice to cover late layout shifts/fonts
+    initializeTabIndicators();
+    setTimeout(initializeTabIndicators, 80);
+    // Resize event forces our resize handler to recompute offsets
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+  });
 
   // Handle visibility changes for tab content (when tabs become visible)
   function handleTabContentVisibilityChange() {

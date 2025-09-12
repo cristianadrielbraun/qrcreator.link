@@ -336,16 +336,18 @@ func (h *Handler) generatePNGQR(c *gin.Context, qrc *qrcode.QRCode, useGradient 
 	}
 
     // Step 3: Add decorative frame around everything - with appropriate background
-	if frame != "none" {
-		framePixels := (originalSize * frameWidthPercent) / 100
-		frameBgColor := color.RGBA{255, 255, 255, 255} // Default white
-		if bgColor.A == 0 {
-			frameBgColor = color.RGBA{0, 0, 0, 0} // Transparent for transparent QRs
-		}
-		if err := h.addFrameToQRFile(tmpFile, frame, framePixels, frameBgColor, borderColor, useGradient, gradientStart, gradientMiddle, gradientEnd); err != nil {
-			fmt.Printf("Warning: Could not add frame to QR: %v\n", err)
-		}
-	}
+    if frame != "none" {
+        framePixels := (originalSize * frameWidthPercent) / 100
+        // Use the actual QR background color for the frame background so
+        // any carved inner gap (rounded frames) visually matches the QR padding.
+        frameBgColor := bgColor
+        if bgColor.A == 0 {
+            frameBgColor = color.RGBA{0, 0, 0, 0} // Ensure fully transparent
+        }
+        if err := h.addFrameToQRFile(tmpFile, frame, framePixels, frameBgColor, borderColor, useGradient, gradientStart, gradientMiddle, gradientEnd); err != nil {
+            fmt.Printf("Warning: Could not add frame to QR: %v\n", err)
+        }
+    }
 
     // If preview and we did not pre-scale, fall back to final scaling as before
     if size == "preview" && !didPreviewPreScale {
@@ -1675,9 +1677,10 @@ func (h *Handler) applySimpleRoundedFrame(img *image.RGBA, frameWidth int, bgCol
     innerR := int(math.Max(2, math.Round(float64(frameWidth)*0.55)))
     outerR := innerR + frameWidth
 
-    // Colors to clear
-    outerClear := color.RGBA{0, 0, 0, 0} // outside outer rounded rect: transparent
-    innerClear := color.RGBA{255, 255, 255, 255}
+    // Colors used when carving: outside outer rounded rect stays transparent;
+    // inner carve should match the QR/padding background color so there's no white halo.
+    outerClear := color.RGBA{0, 0, 0, 0}
+    innerClear := bgColor
     if bgColor.A == 0 {
         innerClear = color.RGBA{0, 0, 0, 0}
     }
