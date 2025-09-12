@@ -55,7 +55,7 @@ func QRCodeSection(link LinkData) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" x-show=\"true\" @tab-changed.window=\"handleTabChange($event.detail)\" @set-qr-url.window=\"$event && console.debug('[QRUI] event set-qr-url', $event.detail); setUrl($event.detail); initializeQR(); updateQRCode();\"><div class=\"grid grid-cols-1 lg:grid-cols-3 gap-6\"><div class=\"space-y-6\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" x-show=\"true\" @tab-changed.window=\"handleTabChange($event.detail)\" @set-qr-url.window=\"$event && console.debug('[QRUI] event set-qr-url', $event.detail); setUrl($event.detail); initializeQR(); updateQRCode();\"><div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\"><div class=\"space-y-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -789,7 +789,7 @@ func QRCodeSection(link LinkData) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "</div><div class=\"space-y-6 lg:col-span-2\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 55, "</div><!-- Center + Right wrapper: stacks on md, splits on lg via contents --><div class=\"md:space-y-6 lg:contents\"><!-- Center: Preview --><div class=\"space-y-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -861,75 +861,163 @@ func QRCodeSection(link LinkData) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "<div class=\"flex flex-col lg:flex-row gap-6\"><div class=\"w-full lg:w-auto flex flex-col items-center\"><div class=\"relative\" x-data=\"{ observer: null }\" x-init=\"observer = new IntersectionObserver((entries) => { if (entries[0].isIntersecting) { initializeQR(); observer.disconnect(); } }, { threshold: 0.2 }); observer.observe($refs.previewContainer);\"><div class=\"flex items-center justify-center bg-transparent\" x-ref=\"previewContainer\" x-bind:style=\"'width:290px;height:290px'\"><img alt=\"QR Preview\" class=\"max-w-full max-h-full shadow-lg\" x-bind:src=\"previewImageUrl\" @load=\"console.debug('[QRUI] preview loaded', $event.target.naturalWidth+'x'+$event.target.naturalHeight)\" @error=\"console.error('[QRUI] preview error', $event)\"></div></div></div><div class=\"w-full space-y-4\"><div class=\"grid grid-cols-2 gap-3\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 58, "<div class=\"flex items-center justify-center\"><div class=\"relative\" x-data=\"{ observer: null }\" x-init=\"observer = new IntersectionObserver((entries) => { if (entries[0].isIntersecting) { initializeQR(); observer.disconnect(); } }, { threshold: 0.2 }); observer.observe($refs.previewContainer);\"><div class=\"flex items-center justify-center bg-transparent\" x-ref=\"previewContainer\" x-bind:style=\"'width:260px;height:290px'\"><img alt=\"QR Preview\" class=\"max-w-full max-h-full shadow-lg\" x-bind:src=\"previewImageUrl\" @load=\"console.debug('[QRUI] preview loaded', $event.target.naturalWidth+'x'+$event.target.naturalHeight)\" @error=\"console.error('[QRUI] preview error', $event)\"></div></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Var31 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-					if !templ_7745c5c3_IsBuffer {
-						defer func() {
-							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-							if templ_7745c5c3_Err == nil {
-								templ_7745c5c3_Err = templ_7745c5c3_BufErr
-							}
-						}()
+				return nil
+			})
+			templ_7745c5c3_Err = card.Content().Render(templ.WithChildren(ctx, templ_7745c5c3_Var30), templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = card.Card(card.Props{Class: "relative md:sticky md:top-6"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var27), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "</div><!-- Right: Actions --><div class=\"space-y-6\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var31 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
 					}
-					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 59, "<template x-if=\"isDownloading && downloadingFormat === 'PNG'\"><svg class=\"animate-spin h-4 w-4 mr-2\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\"></path></svg></template><template x-if=\"!isDownloading || downloadingFormat !== 'PNG'\">")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					templ_7745c5c3_Err = icon.Icon("download")(icon.Props{Size: 16, Class: "mr-2"}).Render(ctx, templ_7745c5c3_Buffer)
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "</template><span x-text=\"isDownloading && downloadingFormat === 'PNG' ? 'Generating PNG...' : 'Download PNG'\">Download PNG</span>")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					return nil
-				})
-				templ_7745c5c3_Err = button.Button(button.Props{Class: "w-full", Attributes: templ.Attributes{"@click": "download('PNG')", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var31), templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Var32 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+				if !templ_7745c5c3_IsBuffer {
+					defer func() {
+						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+						if templ_7745c5c3_Err == nil {
+							templ_7745c5c3_Err = templ_7745c5c3_BufErr
+						}
+					}()
 				}
-				templ_7745c5c3_Var32 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-					if !templ_7745c5c3_IsBuffer {
-						defer func() {
-							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-							if templ_7745c5c3_Err == nil {
-								templ_7745c5c3_Err = templ_7745c5c3_BufErr
-							}
-						}()
-					}
-					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, "<template x-if=\"isDownloading && downloadingFormat === 'SVG'\"><svg class=\"animate-spin h-4 w-4 mr-2\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\"></path></svg></template><template x-if=\"!isDownloading || downloadingFormat !== 'SVG'\">")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					templ_7745c5c3_Err = icon.Icon("download")(icon.Props{Size: 16, Class: "mr-2"}).Render(ctx, templ_7745c5c3_Buffer)
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "</template><span x-text=\"isDownloading && downloadingFormat === 'SVG' ? 'Generating SVG...' : 'Download SVG'\">Download SVG</span>")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					return nil
-				})
-				templ_7745c5c3_Err = button.Button(button.Props{Class: "w-full", Variant: button.VariantSecondary, Attributes: templ.Attributes{"@click": "isSVGAvailable ? download('SVG') : showSVGLimitation()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var32), templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "</div><div x-show=\"showSVGTooltip\" x-transition:enter=\"transition ease-out duration-200\" x-transition:enter-start=\"opacity-0 transform scale-95\" x-transition:enter-end=\"opacity-100 transform scale-100\" x-transition:leave=\"transition ease-in duration-150\" x-transition:leave-start=\"opacity-100 transform scale-100\" x-transition:leave-end=\"opacity-0 transform scale-95\" class=\"absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50\" @click.away=\"showSVGTooltip = false\"><div class=\"px-4 py-1 bg-gray-900 dark:bg-gray-700 text-white rounded-lg shadow-lg max-w-xs text-sm border border-gray-800 dark:border-gray-600\"><div class=\"font-medium mb-1\">SVG Not Available</div><div class=\"text-xs opacity-90\">SVG download is only available with flat colors and simple frame styles. Please change your settings to use SVG format.</div></div></div>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
+				ctx = templ.InitializeContext(ctx)
 				templ_7745c5c3_Var33 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+					if !templ_7745c5c3_IsBuffer {
+						defer func() {
+							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+							if templ_7745c5c3_Err == nil {
+								templ_7745c5c3_Err = templ_7745c5c3_BufErr
+							}
+						}()
+					}
+					ctx = templ.InitializeContext(ctx)
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 60, "Actions ")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					return nil
+				})
+				templ_7745c5c3_Err = card.Title().Render(templ.WithChildren(ctx, templ_7745c5c3_Var33), templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				return nil
+			})
+			templ_7745c5c3_Err = card.Header().Render(templ.WithChildren(ctx, templ_7745c5c3_Var32), templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 61, " ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var34 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+				if !templ_7745c5c3_IsBuffer {
+					defer func() {
+						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+						if templ_7745c5c3_Err == nil {
+							templ_7745c5c3_Err = templ_7745c5c3_BufErr
+						}
+					}()
+				}
+				ctx = templ.InitializeContext(ctx)
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 62, "<div class=\"space-y-5\"><div class=\"space-y-3\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Var35 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+					if !templ_7745c5c3_IsBuffer {
+						defer func() {
+							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+							if templ_7745c5c3_Err == nil {
+								templ_7745c5c3_Err = templ_7745c5c3_BufErr
+							}
+						}()
+					}
+					ctx = templ.InitializeContext(ctx)
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 63, "<template x-if=\"isDownloading && downloadingFormat === 'PNG'\"><svg class=\"animate-spin h-4 w-4 mr-2\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\"></path></svg></template><template x-if=\"!isDownloading || downloadingFormat !== 'PNG'\">")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = icon.Icon("download")(icon.Props{Size: 16, Class: "mr-2"}).Render(ctx, templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, "</template><span x-text=\"isDownloading && downloadingFormat === 'PNG' ? 'Generating PNG...' : 'Download PNG'\">Download PNG</span>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					return nil
+				})
+				templ_7745c5c3_Err = button.Button(button.Props{FullWidth: true, Class: "border", Attributes: templ.Attributes{"@click": "download('PNG')", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var35), templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Var36 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+					if !templ_7745c5c3_IsBuffer {
+						defer func() {
+							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+							if templ_7745c5c3_Err == nil {
+								templ_7745c5c3_Err = templ_7745c5c3_BufErr
+							}
+						}()
+					}
+					ctx = templ.InitializeContext(ctx)
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, "<template x-if=\"isDownloading && downloadingFormat === 'SVG'\"><svg class=\"animate-spin h-4 w-4 mr-2\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\"></path></svg></template><template x-if=\"!isDownloading || downloadingFormat !== 'SVG'\">")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = icon.Icon("download")(icon.Props{Size: 16, Class: "mr-2"}).Render(ctx, templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "</template><span x-text=\"isDownloading && downloadingFormat === 'SVG' ? 'Generating SVG...' : 'Download SVG'\">Download SVG</span>")
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					return nil
+				})
+				templ_7745c5c3_Err = button.Button(button.Props{FullWidth: true, Variant: button.VariantSecondary, Class: "border bg-teal-600 hover:bg-teal-700 text-white", Attributes: templ.Attributes{"@click": "isSVGAvailable ? download('SVG') : showSVGLimitation()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var36), templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "</div><div x-show=\"showSVGTooltip\" x-transition:enter=\"transition ease-out duration-200\" x-transition:enter-start=\"opacity-0 transform scale-95\" x-transition:enter-end=\"opacity-100 transform scale-100\" x-transition:leave=\"transition ease-in duration-150\" x-transition:leave-start=\"opacity-100 transform scale-100\" x-transition:leave-end=\"opacity-0 transform scale-95\" class=\"relative\"><div class=\"px-4 py-1 bg-gray-900 dark:bg-gray-700 text-white rounded-lg shadow-lg max-w-xs text-sm border border-gray-800 dark:border-gray-600\"><div class=\"font-medium mb-1\">SVG Not Available</div><div class=\"text-xs opacity-90\">SVG download is only available with flat colors and simple frame styles. Please change your settings to use SVG format.</div></div></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Var37 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 					if !templ_7745c5c3_IsBuffer {
@@ -945,17 +1033,17 @@ func QRCodeSection(link LinkData) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 64, " Copy to Clipboard ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, " Copy to Clipboard ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					return nil
 				})
-				templ_7745c5c3_Err = button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "copyQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var33), templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "copyQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var37), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Var34 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_Var38 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 					if !templ_7745c5c3_IsBuffer {
@@ -971,101 +1059,21 @@ func QRCodeSection(link LinkData) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 65, " Share QR Code ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, " Share QR Code ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					return nil
 				})
-				templ_7745c5c3_Err = button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "shareQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var34), templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = button.Button(button.Props{Variant: button.VariantOutline, Size: button.SizeSm, Class: "w-full transition-all", Attributes: templ.Attributes{"@click": "shareQR()", "x-bind:disabled": "isDownloading", "x-bind:class": "isDownloading ? 'opacity-50 cursor-not-allowed' : ''"}}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var38), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 66, "</div></div>")
+				templ_7745c5c3_Err = separator.Separator().Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				return nil
-			})
-			templ_7745c5c3_Err = card.Content().Render(templ.WithChildren(ctx, templ_7745c5c3_Var30), templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			return nil
-		})
-		templ_7745c5c3_Err = card.Card(card.Props{Class: "relative"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var27), templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var35 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-			if !templ_7745c5c3_IsBuffer {
-				defer func() {
-					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-					if templ_7745c5c3_Err == nil {
-						templ_7745c5c3_Err = templ_7745c5c3_BufErr
-					}
-				}()
-			}
-			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var36 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-				if !templ_7745c5c3_IsBuffer {
-					defer func() {
-						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-						if templ_7745c5c3_Err == nil {
-							templ_7745c5c3_Err = templ_7745c5c3_BufErr
-						}
-					}()
-				}
-				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Var37 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-					if !templ_7745c5c3_IsBuffer {
-						defer func() {
-							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-							if templ_7745c5c3_Err == nil {
-								templ_7745c5c3_Err = templ_7745c5c3_BufErr
-							}
-						}()
-					}
-					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 67, "Embed QR Code ")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					return nil
-				})
-				templ_7745c5c3_Err = card.Title().Render(templ.WithChildren(ctx, templ_7745c5c3_Var37), templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				return nil
-			})
-			templ_7745c5c3_Err = card.Header().Render(templ.WithChildren(ctx, templ_7745c5c3_Var36), templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 68, " ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Var38 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-				if !templ_7745c5c3_IsBuffer {
-					defer func() {
-						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-						if templ_7745c5c3_Err == nil {
-							templ_7745c5c3_Err = templ_7745c5c3_BufErr
-						}
-					}()
-				}
-				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 69, "<div class=\"space-y-4\"><div><div class=\"flex items-center justify-between mb-2\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, "<div class=\"space-y-4 pt-2\"><div><div class=\"flex items-center justify-between mb-2\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1081,7 +1089,7 @@ func QRCodeSection(link LinkData) templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 70, "HTML Embed ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 71, "HTML Embed ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -1113,7 +1121,7 @@ func QRCodeSection(link LinkData) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 71, "</div><textarea readonly rows=\"2\" class=\"w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"embedCode\"></textarea></div><div><div class=\"flex items-center justify-between mb-2\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, "</div><textarea readonly rows=\"2\" class=\"w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"embedCode\"></textarea></div><div><div class=\"flex items-center justify-between mb-2\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -1129,7 +1137,7 @@ func QRCodeSection(link LinkData) templ.Component {
 						}()
 					}
 					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 72, "Direct Image URL ")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "Direct Image URL ")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -1161,23 +1169,23 @@ func QRCodeSection(link LinkData) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 73, "</div><textarea readonly rows=\"2\" class=\"w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"directImageUrl\"></textarea></div></div>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "</div><textarea readonly rows=\"2\" class=\"w-full px-3 py-2 text-xs font-mono bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none\" x-model=\"directImageUrl\"></textarea></div></div></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = card.Content().Render(templ.WithChildren(ctx, templ_7745c5c3_Var38), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = card.Content().Render(templ.WithChildren(ctx, templ_7745c5c3_Var34), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = card.Card().Render(templ.WithChildren(ctx, templ_7745c5c3_Var35), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = card.Card().Render(templ.WithChildren(ctx, templ_7745c5c3_Var31), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 74, "</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, "</div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1185,7 +1193,7 @@ func QRCodeSection(link LinkData) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 75, "<!-- Removed slider script since preview size is fixed --><script>\n            function qrCodeTabManager() {\n                return {\n                    url: '',\n                    previewSize: 528,\n                    previewImageUrl: '',\n                    settings: {\n                        colorMode: 'flat',\n                        foregroundColor: '#000000',\n                        backgroundColor: '#ffffff',\n                        transparentBackground: false,\n                        gradientStart: '#000000',\n                        gradientMiddle: '#808080',\n                        gradientEnd: '#ff0000',\n                        cornerStyle: 'none',\n                        borderPattern: 'simple',\n                        borderColor: '#000000',\n                        sameColorBorder: true,\n                        qrShape: 'rectangle',\n                        removeBranding: false,\n                        enableLogo: false,\n                        logoFile: null\n                    },\n                    embedCode: '',\n                    directImageUrl: '',\n                    updateTimeout: null,\n                    initialized: false,\n                    isDownloading: false,\n                    downloadingFormat: '',\n                    showSVGTooltip: false,\n                    get isSVGAvailable() {\n                        return this.settings.colorMode === 'flat' && (this.settings.cornerStyle === 'none' || this.settings.borderPattern === 'simple');\n                    },\n                    showSVGLimitation() {\n                        this.showSVGTooltip = true;\n                        setTimeout(() => { this.showSVGTooltip = false; }, 3000);\n                    },\n                    setUrl(linkUrl) { this.url = linkUrl; console.debug('[QRUI] setUrl', linkUrl); },\n                    initializeQR() {\n                        if (!this.initialized && this.url) {\n                            this.initialized = true;\n                            this.updateQRCode();\n                            this.updateEmbedCode();\n                        }\n                    },\n                    handleTabChange(tabValue) { if (tabValue === 'qr') { this.initializeQR(); } },\n                    updateQRCode() {\n                        if (!this.initialized) return;\n                        if (this.updateTimeout) { clearTimeout(this.updateTimeout); }\n                        this.updateTimeout = setTimeout(() => {\n                            this.updateEmbedCode();\n                            this.updateDirectUrl();\n                            console.debug('[QRUI] load preview');\n                            this.loadQRPreview();\n                        }, 150);\n                    },\n                    updateEmbedCode() {\n                        const params = this.buildQRParams('download');\n                        this.embedCode = `<img src=\"${window.location.origin}/api/qr?${params}\" alt=\"QR Code\" style=\"max-width: 100%; height: auto;\" />`;\n                    },\n                    updateDirectUrl() {\n                        const params = this.buildQRParams('download');\n                        this.directImageUrl = `${window.location.origin}/api/qr?${params}`;\n                        console.debug('[QRUI] direct url', this.directImageUrl);\n                    },\n                    buildQRParams(size = 'preview') {\n                        const params = new URLSearchParams({\n                            url: this.url,\n                            colorMode: this.settings.colorMode,\n                            cornerStyle: this.settings.cornerStyle,\n                            borderPattern: this.settings.borderPattern,\n                            qrShape: this.settings.qrShape,\n                            size: size\n                        });\n                        if (this.settings.removeBranding) { params.set('branding', 'none'); } else { params.set('branding', 'default'); }\n                        if (this.settings.enableLogo && this.settings.logoFile) {\n                            params.set('centerLogo', 'true');\n                            if (typeof this.settings.logoFile === 'string') { params.set('logoFile', this.settings.logoFile); }\n                        }\n                        if (this.settings.transparentBackground) { params.set('bg', 'transparent'); } else { params.set('bg', this.settings.backgroundColor.replace('#', '')); }\n                        if (this.settings.colorMode === 'flat') {\n                            params.set('fg', this.settings.foregroundColor.replace('#', ''));\n                        } else {\n                            params.set('gradientStart', this.settings.gradientStart.replace('#', ''));\n                            params.set('gradientMiddle', this.settings.gradientMiddle.replace('#', ''));\n                            params.set('gradientEnd', this.settings.gradientEnd.replace('#', ''));\n                        }\n                        if (this.settings.cornerStyle !== 'none') {\n                            if (!this.settings.sameColorBorder) { params.set('borderColor', this.settings.borderColor.replace('#', '')); }\n                            params.set('borderPattern', this.settings.borderPattern);\n                        }\n                        params.set('previewSize', this.previewSize.toString());\n                        return params.toString();\n                    },\n                    async loadQRPreview() {\n                        try {\n                            const params = this.buildQRParams('preview');\n                            const url = `/api/qr?${params}`;\n                            this.previewImageUrl = url;\n                            console.debug('[QRUI] preview url', url);\n                        } catch (e) { console.error('Preview error:', e); }\n                    },\n                    async download(format) {\n                        try {\n                            this.isDownloading = true; this.downloadingFormat = format;\n                            const params = this.buildQRParams('download');\n                            const response = await fetch(`/api/qr?${params}`);\n                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n                            const blob = await response.blob();\n                            const url = window.URL.createObjectURL(blob);\n                            const a = document.createElement('a'); a.href = url; a.download = `qr.${format.toLowerCase()}`; a.click(); window.URL.revokeObjectURL(url);\n                        } catch (e) { console.error('Download error:', e); }\n                        finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }\n                    },\n                    async copyQR() {\n                        try {\n                            this.isDownloading = true; this.downloadingFormat = 'PNG';\n                            const params = this.buildQRParams('download');\n                            const response = await fetch(`/api/qr?${params}`);\n                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n                            const blob = await response.blob();\n                            await navigator.clipboard.write([ new ClipboardItem({ [blob.type]: blob }) ]);\n                            this.showToast('Success', 'QR code copied to clipboard!', 'success');\n                        } catch (e) { console.error('Copy error:', e); this.showToast('Error', 'Failed to copy QR code', 'error'); }\n                        finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }\n                    },\n                    copyEmbed() { navigator.clipboard.writeText(this.embedCode); this.showToast('Success', 'Embed code copied to clipboard!', 'success'); },\n                    copyDirectUrl() { navigator.clipboard.writeText(this.directImageUrl); this.showToast('Success', 'Direct URL copied to clipboard!', 'success'); },\n                    shareQR() { if (typeof openQRShareModal === 'function') { openQRShareModal(this.directImageUrl, 'Check out this QR code'); } },\n                    showToast(title, description, variant) {\n                        const form = document.createElement('form'); form.style.display = 'none';\n                        const ti = document.createElement('input'); ti.name = 'title'; ti.value = title; form.appendChild(ti);\n                        const di = document.createElement('input'); di.name = 'description'; di.value = description; form.appendChild(di);\n                        const vi = document.createElement('input'); vi.name = 'variant'; vi.value = variant; form.appendChild(vi);\n                        const ds = document.createElement('input'); ds.name = 'dismissible'; ds.value = 'on'; form.appendChild(ds);\n                        document.body.appendChild(form);\n                        if (window.htmx) { htmx.ajax('POST', '/api/htmx/toast', { source: form, target: '#toast-container', swap: 'afterbegin' }); }\n                        document.body.removeChild(form);\n                    },\n                }\n            }\n            // Minimal stub to avoid errors if not defined elsewhere\n            window.openQRShareModal = window.openQRShareModal || function(url, text){ try { navigator.share && navigator.share({ url, text }); } catch(e){} };\n        </script></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 76, "<!-- Removed slider script since preview size is fixed --><script>\n            function qrCodeTabManager() {\n                return {\n                    url: '',\n                    previewSize: 528,\n                    previewImageUrl: '',\n                    settings: {\n                        colorMode: 'flat',\n                        foregroundColor: '#000000',\n                        backgroundColor: '#ffffff',\n                        transparentBackground: false,\n                        gradientStart: '#000000',\n                        gradientMiddle: '#808080',\n                        gradientEnd: '#ff0000',\n                        cornerStyle: 'none',\n                        borderPattern: 'simple',\n                        borderColor: '#000000',\n                        sameColorBorder: true,\n                        qrShape: 'rectangle',\n                        removeBranding: false,\n                        enableLogo: false,\n                        logoFile: null\n                    },\n                    embedCode: '',\n                    directImageUrl: '',\n                    updateTimeout: null,\n                    initialized: false,\n                    isDownloading: false,\n                    downloadingFormat: '',\n                    showSVGTooltip: false,\n                    get isSVGAvailable() {\n                        return this.settings.colorMode === 'flat' && (this.settings.cornerStyle === 'none' || this.settings.borderPattern === 'simple');\n                    },\n                    showSVGLimitation() {\n                        this.showSVGTooltip = true;\n                        setTimeout(() => { this.showSVGTooltip = false; }, 3000);\n                    },\n                    setUrl(linkUrl) { this.url = linkUrl; console.debug('[QRUI] setUrl', linkUrl); },\n                    initializeQR() {\n                        if (!this.initialized && this.url) {\n                            this.initialized = true;\n                            this.updateQRCode();\n                            this.updateEmbedCode();\n                        }\n                    },\n                    handleTabChange(tabValue) { if (tabValue === 'qr') { this.initializeQR(); } },\n                    updateQRCode() {\n                        if (!this.initialized) return;\n                        if (this.updateTimeout) { clearTimeout(this.updateTimeout); }\n                        this.updateTimeout = setTimeout(() => {\n                            this.updateEmbedCode();\n                            this.updateDirectUrl();\n                            console.debug('[QRUI] load preview');\n                            this.loadQRPreview();\n                        }, 150);\n                    },\n                    updateEmbedCode() {\n                        const params = this.buildQRParams('download');\n                        this.embedCode = `<img src=\"${window.location.origin}/api/qr?${params}\" alt=\"QR Code\" style=\"max-width: 100%; height: auto;\" />`;\n                    },\n                    updateDirectUrl() {\n                        const params = this.buildQRParams('download');\n                        this.directImageUrl = `${window.location.origin}/api/qr?${params}`;\n                        console.debug('[QRUI] direct url', this.directImageUrl);\n                    },\n                    buildQRParams(size = 'preview') {\n                        const params = new URLSearchParams({\n                            url: this.url,\n                            colorMode: this.settings.colorMode,\n                            cornerStyle: this.settings.cornerStyle,\n                            borderPattern: this.settings.borderPattern,\n                            qrShape: this.settings.qrShape,\n                            size: size\n                        });\n                        if (this.settings.removeBranding) { params.set('branding', 'none'); } else { params.set('branding', 'default'); }\n                        if (this.settings.enableLogo && this.settings.logoFile) {\n                            params.set('centerLogo', 'true');\n                            if (typeof this.settings.logoFile === 'string') { params.set('logoFile', this.settings.logoFile); }\n                        }\n                        if (this.settings.transparentBackground) { params.set('bg', 'transparent'); } else { params.set('bg', this.settings.backgroundColor.replace('#', '')); }\n                        if (this.settings.colorMode === 'flat') {\n                            params.set('fg', this.settings.foregroundColor.replace('#', ''));\n                        } else {\n                            params.set('gradientStart', this.settings.gradientStart.replace('#', ''));\n                            params.set('gradientMiddle', this.settings.gradientMiddle.replace('#', ''));\n                            params.set('gradientEnd', this.settings.gradientEnd.replace('#', ''));\n                        }\n                        if (this.settings.cornerStyle !== 'none') {\n                            if (!this.settings.sameColorBorder) { params.set('borderColor', this.settings.borderColor.replace('#', '')); }\n                            params.set('borderPattern', this.settings.borderPattern);\n                        }\n                        params.set('previewSize', this.previewSize.toString());\n                        return params.toString();\n                    },\n                    async loadQRPreview() {\n                        try {\n                            const params = this.buildQRParams('preview');\n                            const url = `/api/qr?${params}`;\n                            this.previewImageUrl = url;\n                            console.debug('[QRUI] preview url', url);\n                        } catch (e) { console.error('Preview error:', e); }\n                    },\n                    async download(format) {\n                        try {\n                            this.isDownloading = true; this.downloadingFormat = format;\n                            const params = this.buildQRParams('download');\n                            const response = await fetch(`/api/qr?${params}`);\n                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n                            const blob = await response.blob();\n                            const url = window.URL.createObjectURL(blob);\n                            const a = document.createElement('a'); a.href = url; a.download = `qr.${format.toLowerCase()}`; a.click(); window.URL.revokeObjectURL(url);\n                        } catch (e) { console.error('Download error:', e); }\n                        finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }\n                    },\n                    async copyQR() {\n                        try {\n                            this.isDownloading = true; this.downloadingFormat = 'PNG';\n                            const params = this.buildQRParams('download');\n                            const response = await fetch(`/api/qr?${params}`);\n                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);\n                            const blob = await response.blob();\n                            await navigator.clipboard.write([ new ClipboardItem({ [blob.type]: blob }) ]);\n                            this.showToast('Success', 'QR code copied to clipboard!', 'success');\n                        } catch (e) { console.error('Copy error:', e); this.showToast('Error', 'Failed to copy QR code', 'error'); }\n                        finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }\n                    },\n                    copyEmbed() { navigator.clipboard.writeText(this.embedCode); this.showToast('Success', 'Embed code copied to clipboard!', 'success'); },\n                    copyDirectUrl() { navigator.clipboard.writeText(this.directImageUrl); this.showToast('Success', 'Direct URL copied to clipboard!', 'success'); },\n                    shareQR() { if (typeof openQRShareModal === 'function') { openQRShareModal(this.directImageUrl, 'Check out this QR code'); } },\n                    showToast(title, description, variant) {\n                        const form = document.createElement('form'); form.style.display = 'none';\n                        const ti = document.createElement('input'); ti.name = 'title'; ti.value = title; form.appendChild(ti);\n                        const di = document.createElement('input'); di.name = 'description'; di.value = description; form.appendChild(di);\n                        const vi = document.createElement('input'); vi.name = 'variant'; vi.value = variant; form.appendChild(vi);\n                        const ds = document.createElement('input'); ds.name = 'dismissible'; ds.value = 'on'; form.appendChild(ds);\n                        document.body.appendChild(form);\n                        if (window.htmx) { htmx.ajax('POST', '/api/htmx/toast', { source: form, target: '#toast-container', swap: 'afterbegin' }); }\n                        document.body.removeChild(form);\n                    },\n                }\n            }\n            // Minimal stub to avoid errors if not defined elsewhere\n            window.openQRShareModal = window.openQRShareModal || function(url, text){ try { navigator.share && navigator.share({ url, text }); } catch(e){} };\n        </script></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

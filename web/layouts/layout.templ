@@ -33,7 +33,7 @@ templ Layout(title string, children templ.Component) {
         </head>
         <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100">
             <header class="border-b bg-white/70 dark:bg-slate-900/70 border-slate-200 dark:border-slate-700 backdrop-blur supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-slate-900/60">
-                <div class="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
+                <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
                     <a href="/" class="inline-flex items-center gap-2 font-semibold">
                         <img src="/web/static/logo.svg" alt="qrcreator.link" class="w-7 h-7" />
                         <span>qrcreator.link</span>
@@ -60,11 +60,11 @@ templ Layout(title string, children templ.Component) {
                     </nav>
                 </div>
             </header>
-            <main class="mx-auto max-w-5xl px-4 py-8 flex-1 w-full">
+            <main class="mx-auto max-w-7xl px-4 py-8 flex-1 w-full">
                 @children
             </main>
             <footer class="mt-8 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-sm text-slate-600 dark:text-slate-400">
-                <div class="mx-auto max-w-5xl px-4">Built with Go + templ + templui</div>
+                <div class="mx-auto max-w-7xl px-4">Built with Go + templ + templui</div>
             </footer>
         </body>
     </html>

@@ -2,7 +2,7 @@ Source code of qrcreator.link site made with Go + templ, using Tailwind, HTMX, A
 The service is up & running in [qrcreator.link](https://qrcreator.link)
 
 ## Quick Run
----------
+
 If you want to simply download and run, you can:
 
 ### 1. git clone https://github.com/cristianadrielbraun/qrcreator.link && cd qrcreator.link
@@ -14,7 +14,6 @@ That's it. It will be running and functional on port 8080.
 
 
 ## Dev Setup
----------
 
 If you want to be able to develop further, you should install the dependencies as well:
 
