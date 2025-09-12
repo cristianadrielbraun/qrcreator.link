@@ -6,7 +6,6 @@ The service is up & running in [qrcreator.link](https://qrcreator.link)
 If you want to simply download and run, you can:
 
 ### 1. git clone https://github.com/cristianadrielbraun/qrcreator.link && cd qrcreator.link
-   `go install github.com/a-h/templ/cmd/templ@latest`
 
 ### 2. go run .
 
