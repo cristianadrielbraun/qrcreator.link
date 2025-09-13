@@ -100,7 +100,6 @@ The project relies on these main external libraries and tools:
   - templ: https://github.com/a-h/templ — component-based HTML templates used in `web/.../*.templ`
   - templui: https://github.com/templui/templui — prebuilt UI components used within templ templates
   - go-qrcode: https://github.com/yeqown/go-qrcode — QR generation core
-  - oksvg: https://github.com/srwiley/oksvg and rasterx: https://github.com/srwiley/rasterx — SVG parsing/rasterization utilities
 
 - Frontend assets
   - Tailwind CSS: https://tailwindcss.com — styling (prebuilt CSS is included under `web/static/css`)
