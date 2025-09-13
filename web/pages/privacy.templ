@@ -1,0 +1,34 @@
+package pages
+
+import (
+
+    "github.com/cristianadrielbraun/qrcreator.link/web/layouts"
+)
+
+templ privacyContent() {
+    <section class="mx-auto max-w-3xl py-8">
+            <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Privacy</h1>
+            <p class="mt-4 text-slate-700 dark:text-slate-300">Last updated: 13-09-25</p>
+
+            <p class="mt-6">I built qrcreator.link to be fast, simple, open‑source, and privacy‑friendly. You can always review the full source code on GitHub.</p>
+
+            <h2 class="mt-8 text-lg font-semibold">Data collection</h2>
+            <p class="mt-2">I do not use tracking cookies and I do not require accounts. The URL you enter is processed only to generate a QR code and is not stored by me.</p>
+
+            <h2 class="mt-6 text-lg font-semibold">Logs</h2>
+            <p class="mt-2">I only keep real‑time runtime logs in memory for operational purposes. I do not persist access or application logs to disk or external storage.</p>
+
+            <h2 class="mt-6 text-lg font-semibold">Generated QR codes</h2>
+            <p class="mt-2">QR codes are generated on demand and streamed back to your browser. I do not persist generated images.</p>
+
+            <h2 class="mt-6 text-lg font-semibold">Third‑party services</h2>
+            <p class="mt-2">The site is served through my infrastructure with a reverse proxy for TLS/edge routing. No analytics or advertising trackers are included.</p>
+
+            <h2 class="mt-6 text-lg font-semibold">Contact</h2>
+            <p class="mt-2">Questions or feedback? Reach me on <a class="underline" href="https://github.com/cristianadrielbraun" target="_blank" rel="noopener">GitHub</a>, <a class="underline" href="https://twitter.com/MonitoBraun" target="_blank" rel="noopener">Twitter</a>, or <a class="underline" href="https://bsky.app/profile/monitobraun.bsky.social" target="_blank" rel="noopener">Bluesky</a>.</p>
+    </section>
+}
+
+templ PrivacyPage() {
+    @layouts.Layout("Privacy Policy – qrcreator.link", privacyContent())
+}
