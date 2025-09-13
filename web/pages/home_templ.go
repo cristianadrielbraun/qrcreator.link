@@ -11,7 +11,6 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"github.com/cristianadrielbraun/qrcreator.link/web/components"
 	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
-	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/card"
 	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/icon"
 	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/input"
 	"github.com/cristianadrielbraun/qrcreator.link/web/layouts"
@@ -91,77 +90,7 @@ func homeContent() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<!-- Promo: Shortn Link --><div class=\"mt-6\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-			if !templ_7745c5c3_IsBuffer {
-				defer func() {
-					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-					if templ_7745c5c3_Err == nil {
-						templ_7745c5c3_Err = templ_7745c5c3_BufErr
-					}
-				}()
-			}
-			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var4 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-				if !templ_7745c5c3_IsBuffer {
-					defer func() {
-						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-						if templ_7745c5c3_Err == nil {
-							templ_7745c5c3_Err = templ_7745c5c3_BufErr
-						}
-					}()
-				}
-				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"flex flex-col gap-4 md:flex-row md:items-center md:justify-between\"><div class=\"flex items-center gap-3\"><img src=\"/web/static/shortnlink-v-logo.svg\" alt=\"Shortn Link\" class=\"h-8 w-auto md:hidden\"> <img src=\"/web/static/shortnlink-h-logo.svg\" alt=\"Shortn Link\" class=\"h-6 w-auto hidden md:block\"><div><div class=\"text-base font-semibold\">Unlock more with Shortn Link</div><p class=\"text-sm text-slate-600 dark:text-slate-400\">Powerful link shortener with integrated QR, rich metrics, analytics, and reports.</p></div></div><div class=\"shrink-0\">")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Var5 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-					if !templ_7745c5c3_IsBuffer {
-						defer func() {
-							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-							if templ_7745c5c3_Err == nil {
-								templ_7745c5c3_Err = templ_7745c5c3_BufErr
-							}
-						}()
-					}
-					ctx = templ.InitializeContext(ctx)
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "Explore Shortn Link ")
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
-					return nil
-				})
-				templ_7745c5c3_Err = button.Button(button.Props{Href: "https://shortn.link/", Target: "_blank", FullWidth: true, Class: "md:w-auto"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></div>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				return nil
-			})
-			templ_7745c5c3_Err = card.Content().Render(templ.WithChildren(ctx, templ_7745c5c3_Var4), templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			return nil
-		})
-		templ_7745c5c3_Err = card.Card().Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></section><script>\n            function qrLanding() {\n                return {\n                    phase: 'landing',\n                    showTitle: true,\n                    userUrl: '',\n                    urlValid: true,\n                    errorMsg: '',\n                    validateAndNormalize(value) {\n                        if (!value) { return { ok: false, value: '', msg: 'URL cannot be empty' }; }\n                        let v = value.trim();\n                        // If no scheme, assume https\n                        if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v)) { v = 'https://' + v; }\n                        try {\n                            const u = new URL(v);\n                            if (!/^https?:$/.test(u.protocol)) { return { ok: false, value: '', msg: 'Only http and https URLs are supported' }; }\n                            if (!u.hostname) { return { ok: false, value: '', msg: 'URL must include a valid host' }; }\n                            return { ok: true, value: u.toString(), msg: '' };\n                        } catch (e) {\n                            return { ok: false, value: '', msg: 'Enter a valid URL (e.g., https://example.com)' };\n                        }\n                    },\n                    showToast(title, description, variant) {\n                        const form = document.createElement('form'); form.style.display = 'none';\n                        const ti = document.createElement('input'); ti.name = 'title'; ti.value = title; form.appendChild(ti);\n                        const di = document.createElement('input'); di.name = 'description'; di.value = description; form.appendChild(di);\n                        const vi = document.createElement('input'); vi.name = 'variant'; vi.value = variant; form.appendChild(vi);\n                        const ds = document.createElement('input'); ds.name = 'dismissible'; ds.value = 'on'; form.appendChild(ds);\n                        document.body.appendChild(form);\n                        if (window.htmx) { htmx.ajax('POST', '/api/htmx/toast', { source: form, target: '#toast-container', swap: 'afterbegin' }); }\n                        document.body.removeChild(form);\n                    },\n                    submit() {\n                        const out = this.validateAndNormalize(this.userUrl);\n                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }\n                        const url = out.value;\n                        this.urlValid = true; this.errorMsg = '';\n                        this.userUrl = url;\n                        // 1) Fade out title first (200ms)\n                        this.showTitle = false;\n                        // 2) After fade, move input towards top (300ms via margin change)\n                        setTimeout(() => { this.phase = 'qr'; }, 200);\n                        window.__qrLastUrl = url;\n                        // 3) Notify QR section after movement completes\n                        setTimeout(() => {\n                            window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                        }, 200 + 300);\n                    },\n                    resubmit() {\n                        const out = this.validateAndNormalize(this.userUrl);\n                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }\n                        const url = out.value; this.urlValid = true; this.errorMsg = ''; this.userUrl = url;\n                        window.__qrLastUrl = url;\n                        window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                    }\n                }\n            }\n        </script></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</section><script>\n            function qrLanding() {\n                return {\n                    phase: 'landing',\n                    showTitle: true,\n                    userUrl: '',\n                    urlValid: true,\n                    errorMsg: '',\n                    validateAndNormalize(value) {\n                        if (!value) { return { ok: false, value: '', msg: 'URL cannot be empty' }; }\n                        let v = value.trim();\n                        // If no scheme, assume https\n                        if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v)) { v = 'https://' + v; }\n                        try {\n                            const u = new URL(v);\n                            if (!/^https?:$/.test(u.protocol)) { return { ok: false, value: '', msg: 'Only http and https URLs are supported' }; }\n                            if (!u.hostname) { return { ok: false, value: '', msg: 'URL must include a valid host' }; }\n                            return { ok: true, value: u.toString(), msg: '' };\n                        } catch (e) {\n                            return { ok: false, value: '', msg: 'Enter a valid URL (e.g., https://example.com)' };\n                        }\n                    },\n                    showToast(title, description, variant) {\n                        const form = document.createElement('form'); form.style.display = 'none';\n                        const ti = document.createElement('input'); ti.name = 'title'; ti.value = title; form.appendChild(ti);\n                        const di = document.createElement('input'); di.name = 'description'; di.value = description; form.appendChild(di);\n                        const vi = document.createElement('input'); vi.name = 'variant'; vi.value = variant; form.appendChild(vi);\n                        const ds = document.createElement('input'); ds.name = 'dismissible'; ds.value = 'on'; form.appendChild(ds);\n                        document.body.appendChild(form);\n                        if (window.htmx) { htmx.ajax('POST', '/api/htmx/toast', { source: form, target: '#toast-container', swap: 'afterbegin' }); }\n                        document.body.removeChild(form);\n                    },\n                    submit() {\n                        const out = this.validateAndNormalize(this.userUrl);\n                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }\n                        const url = out.value;\n                        this.urlValid = true; this.errorMsg = '';\n                        this.userUrl = url;\n                        // 1) Fade out title first (200ms)\n                        this.showTitle = false;\n                        // 2) After fade, move input towards top (300ms via margin change)\n                        setTimeout(() => { this.phase = 'qr'; }, 200);\n                        window.__qrLastUrl = url;\n                        // 3) Notify QR section after movement completes\n                        setTimeout(() => {\n                            window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                        }, 200 + 300);\n                    },\n                    resubmit() {\n                        const out = this.validateAndNormalize(this.userUrl);\n                        if (!out.ok) { this.urlValid = false; this.errorMsg = out.msg; this.showToast('Invalid URL', out.msg, 'error'); return; }\n                        const url = out.value; this.urlValid = true; this.errorMsg = ''; this.userUrl = url;\n                        window.__qrLastUrl = url;\n                        window.dispatchEvent(new CustomEvent('set-qr-url', { detail: url }));\n                    }\n                }\n            }\n        </script></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -186,9 +115,9 @@ func HomePage() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var6 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var6 == nil {
-			templ_7745c5c3_Var6 = templ.NopComponent
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = layouts.Layout("QR Code Generator – qrcreator.link", homeContent()).Render(ctx, templ_7745c5c3_Buffer)

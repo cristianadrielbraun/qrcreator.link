@@ -106,36 +106,7 @@ templ Layout(title string, children templ.Component) {
                                 <span class="hidden sm:inline" x-text="dark ? 'Dark' : 'Light'"></span>
                             }
                         </div>
-                        @button.Button(button.Props{
-                            Href: "https://shortn.link/",
-                            Target: "_blank",
-                            Class: "bg-transparent text-white hover:bg-primary/50 hidden sm:inline-flex",
-                            Attributes: templ.Attributes{
-                                "aria-label": "Unlock more on Shortn.link",
-                                "title": "Unlock more features!",
-                                "rel": "noopener noreferrer",
-                            },
-                        }) {
-                            <img src="/web/static/shortnlink-logo.svg" alt="Shortn.link" class="h-4 w-4" />
-                            <span>Unlock more features!</span>
-                        }
                     </nav>
-                    </div>
-                    <!-- Mobile-only second line with Unlock button; on larger screens it's inline above -->
-                    <div class="w-full sm:hidden">
-                        @button.Button(button.Props{
-                            Href: "https://shortn.link/",
-                            Target: "_blank",
-                            Class: "bg-transparent text-white hover:bg-primary/50 w-full",
-                            Attributes: templ.Attributes{
-                                "aria-label": "Unlock more on Shortn.link",
-                                "title": "Unlock more features!",
-                                "rel": "noopener noreferrer",
-                            },
-                        }) {
-                            <img src="/web/static/shortnlink-logo.svg" alt="Shortn.link" class="h-4 w-4" />
-                            <span>Unlock more features!</span>
-                        }
                     </div>
                 </div>
             </header>
