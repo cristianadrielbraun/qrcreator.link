@@ -7,8 +7,6 @@ require github.com/a-h/templ v0.3.943
 require (
 	github.com/Oudwins/tailwind-merge-go v0.2.1
 	github.com/gin-gonic/gin v1.10.1
-	github.com/srwiley/oksvg v0.0.0-20221011165216-be6e8873101c
-	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef
 	github.com/yeqown/go-qrcode/v2 v2.2.5
 	github.com/yeqown/go-qrcode/writer/standard v1.3.0
 )
