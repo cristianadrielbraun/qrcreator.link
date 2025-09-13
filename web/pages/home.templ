@@ -6,6 +6,7 @@ import (
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/input"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/icon"
+    "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/card"
 )
 
 // Home content: landing input + QR UI
@@ -44,8 +45,28 @@ templ homeContent() {
         </div>
 
         <!-- QR body under the top input -->
-        <section x-show="phase === 'qr'" x-transition.opacity.duration.250ms class="mx-auto max-w-5xl px-4 mt-6">
+        <section x-show="phase === 'qr'" x-transition.opacity.duration.250ms class="mx-auto max-w-7xl px-4 mt-6">
             @components.QRCodeSection()
+
+            <!-- Promo: Shortn Link -->
+            <div class="mt-6">
+                @card.Card() {
+                    @card.Content() {
+                        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                            <div class="flex items-center gap-3">
+                                <img src="/web/static/shortnlink-h-logo.svg" alt="Shortn Link" class="h-6 w-auto" />
+                                <div>
+                                    <div class="text-base font-semibold">Unlock more with Shortn Link</div>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">Powerful link shortener with integrated QR, rich metrics, analytics, and reports.</p>
+                                </div>
+                            </div>
+                            <div class="shrink-0">
+                                @button.Button(button.Props{Href: "https://shortn.link/", Target: "_blank"}) { Explore Shortn Link }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
         </section>
 
         <script>

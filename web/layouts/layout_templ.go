@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
 	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/popover"
 	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/tabs"
 	"github.com/cristianadrielbraun/qrcreator.link/web/components/ui/toast"
@@ -43,7 +44,7 @@ func Layout(title string, children templ.Component) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/layouts/layout.templ`, Line: 16, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/layouts/layout.templ`, Line: 17, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -65,7 +66,110 @@ func Layout(title string, children templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<style>[x-cloak]{display:none !important}</style><script type=\"application/ld+json\">\n            {\n              \"@context\": \"https://schema.org\",\n              \"@type\": \"Organization\",\n              \"name\": \"qrcreator.link\",\n              \"url\": \"https://qrcreator.link/\",\n              \"logo\": \"https://qrcreator.link/web/static/logo.svg\",\n              \"sameAs\": [\n                \"https://github.com/cristianadrielbraun/qrcreator.link\"\n              ]\n            }\n            </script><script>\n                (function() {\n                    try {\n                        const t = localStorage.getItem('theme');\n                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;\n                        const enableDark = t === 'dark' || (!t && prefersDark);\n                        document.documentElement.classList.toggle('dark', enableDark);\n                    } catch (_) {}\n                })();\n            </script></head><body class=\"min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100\"><header class=\"border-b bg-white/70 dark:bg-slate-900/70 border-slate-200 dark:border-slate-700 backdrop-blur supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-slate-900/60\"><div class=\"mx-auto max-w-7xl px-4 py-3 flex items-center justify-between\"><a href=\"/\" class=\"inline-flex items-center gap-2 font-semibold\"><img src=\"/web/static/logo.svg\" alt=\"Site logo\" class=\"w-7 h-7\"> <span>qrcreator.link</span></a><nav class=\"flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400\"><a href=\"https://github.com/cristianadrielbraun/qrcreator.link\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"inline-flex items-center gap-2 rounded-md border px-3 py-1.5 font-medium shadow-sm bg-white/70 hover:bg-white transition dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700\" aria-label=\"View on GitHub\" title=\"View on GitHub\"><svg class=\"h-4 w-4\" viewBox=\"0 0 98 96\" aria-hidden=\"true\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z\"></path></svg> <span class=\"sm:inline\">GitHub</span></a><div x-data=\"{ dark: document.documentElement.classList.contains('dark') }\"><button type=\"button\" @click=\"dark = !dark; document.documentElement.classList.toggle('dark', dark); localStorage.setItem('theme', dark ? 'dark' : 'light')\" class=\"inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium shadow-sm bg-white/70 hover:bg-white transition dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-slate-700\" aria-label=\"Toggle theme\" title=\"Toggle theme\"><span class=\"sr-only\">Toggle theme</span> <svg x-show=\"!dark\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\" class=\"h-4 w-4\"><path d=\"M12 18a6 6 0 100-12 6 6 0 000 12zm0 4a1 1 0 011 1v1h-2v-1a1 1 0 011-1zm0-22a1 1 0 00-1 1v1h2V1a1 1 0 00-1-1zm11 11a1 1 0 01-1 1h-1v-2h1a1 1 0 011 1zM3 12a1 1 0 01-1-1H1v2h1a1 1 0 011-1zm16.95 6.364l.707.707-1.414 1.415-.708-.708 1.415-1.414zM4.05 5.636l-.707-.707L4.757 3.515l.708.708L4.05 5.636zm14.142-2.121l.707-.707 1.415 1.414-.708.708-1.414-1.415zM4.757 19.778l-.707.707L2.636 19.07l.707-.707 1.414 1.414z\"></path></svg> <svg x-show=\"dark\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\" class=\"h-4 w-4\"><path d=\"M21 12.79A9 9 0 1111.21 3c.3 0 .6.02.89.05A7 7 0 0021 12.79z\"></path></svg> <span x-text=\"dark ? 'Dark' : 'Light'\"></span></button></div></nav></div></header><main class=\"mx-auto max-w-7xl px-4 flex-1 w-full\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<style>[x-cloak]{display:none !important}</style><script type=\"application/ld+json\">\n            {\n              \"@context\": \"https://schema.org\",\n              \"@type\": \"Organization\",\n              \"name\": \"qrcreator.link\",\n              \"url\": \"https://qrcreator.link/\",\n              \"logo\": \"https://qrcreator.link/web/static/logo.svg\",\n              \"sameAs\": [\n                \"https://github.com/cristianadrielbraun/qrcreator.link\"\n              ]\n            }\n            </script><script>\n                (function() {\n                    try {\n                        const t = localStorage.getItem('theme');\n                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;\n                        const enableDark = t === 'dark' || (!t && prefersDark);\n                        document.documentElement.classList.toggle('dark', enableDark);\n                    } catch (_) {}\n                })();\n            </script></head><body class=\"min-h-screen flex flex-col bg-slate-50 text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-100\"><header class=\"border-b bg-white/70 dark:bg-slate-900/70 border-slate-200 dark:border-slate-700 backdrop-blur supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-slate-900/60\"><div class=\"mx-auto max-w-7xl px-4 py-3 flex items-center justify-between\"><a href=\"/\" class=\"inline-flex items-center gap-2 font-semibold\"><img src=\"/web/static/logo.svg\" alt=\"Site logo\" class=\"w-7 h-7\"> <span>qrcreator.link</span></a><nav class=\"flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<svg class=\"h-4 w-4\" viewBox=\"0 0 98 96\" aria-hidden=\"true\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z\"></path></svg> <span class=\"sm:inline\">GitHub</span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = button.Button(button.Props{
+			Href:    "https://github.com/cristianadrielbraun/qrcreator.link",
+			Target:  "_blank",
+			Variant: button.VariantOutline,
+			Attributes: templ.Attributes{
+				"aria-label": "View on GitHub",
+				"title":      "View on GitHub",
+				"rel":        "noopener noreferrer",
+			},
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div x-data=\"{ dark: document.documentElement.classList.contains('dark') }\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var4 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<span class=\"sr-only\">Toggle theme</span> <svg x-show=\"!dark\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\" class=\"h-4 w-4\"><path d=\"M12 18a6 6 0 100-12 6 6 0 000 12zm0 4a1 1 0 011 1v1h-2v-1a1 1 0 011-1zm0-22a1 1 0 00-1 1v1h2V1a1 1 0 00-1-1zm11 11a1 1 0 01-1 1h-1v-2h1a1 1 0 011 1zM3 12a1 1 0 01-1-1H1v2h1a1 1 0 011-1zm16.95 6.364l.707.707-1.414 1.415-.708-.708 1.415-1.414zM4.05 5.636l-.707-.707L4.757 3.515l.708.708L4.05 5.636zm14.142-2.121l.707-.707 1.415 1.414-.708.708-1.414-1.415zM4.757 19.778l-.707.707L2.636 19.07l.707-.707 1.414 1.414z\"></path></svg> <svg x-show=\"dark\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\" class=\"h-4 w-4\"><path d=\"M21 12.79A9 9 0 1111.21 3c.3 0 .6.02.89.05A7 7 0 0021 12.79z\"></path></svg> <span x-text=\"dark ? 'Dark' : 'Light'\"></span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = button.Button(button.Props{
+			Variant: button.VariantOutline,
+			Attributes: templ.Attributes{
+				"@click":     "dark = !dark; document.documentElement.classList.toggle('dark', dark); localStorage.setItem('theme', dark ? 'dark' : 'light')",
+				"aria-label": "Toggle theme",
+				"title":      "Toggle theme",
+			},
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var4), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var5 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<img src=\"/web/static/shortnlink-logo.svg\" alt=\"Shortn.link\" class=\"h-4 w-4\"> <span>Unlock more features!</span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = button.Button(button.Props{
+			Href:   "https://shortn.link/",
+			Target: "_blank",
+			Class:  "bg-transparent text-white hover:bg-primary/50",
+			Attributes: templ.Attributes{
+				"aria-label": "Unlock more on Shortn.link",
+				"title":      "Unlock more features!",
+				"rel":        "noopener noreferrer",
+			},
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</nav></div></header><main class=\"mx-auto max-w-7xl px-4 flex-1 w-full\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -73,7 +177,7 @@ func Layout(title string, children templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</main><footer class=\"mt-8 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-sm text-slate-600 dark:text-slate-400\"><div class=\"mx-auto max-w-7xl px-4 flex items-center justify-center gap-3 flex-wrap\"><span>Built with Go + templ + templui</span> <span class=\"opacity-40\">•</span> <a href=\"/about\" class=\"hover:underline\">About</a> <span class=\"opacity-40\">•</span> <a href=\"/privacy\" class=\"hover:underline\">Privacy</a></div><div class=\"mt-3 flex items-center justify-center gap-4\"><a href=\"https://github.com/cristianadrielbraun\" target=\"_blank\" rel=\"noopener\" aria-label=\"GitHub\" title=\"GitHub\" class=\"hover:text-slate-800 dark:hover:text-slate-200\"><svg class=\"h-5 w-5\" viewBox=\"0 0 98 96\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z\"></path></svg></a> <a href=\"https://x.com/MonitoBraun\" target=\"_blank\" rel=\"noopener\" aria-label=\"X (Twitter)\" title=\"X (Twitter)\" class=\"hover:text-sky-600\"><svg class=\"h-5 w-5 scale-90\" viewBox=\"0 0 1200 1227\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z\"></path></svg></a> <a href=\"https://bsky.app/profile/monitobraun.bsky.social\" target=\"_blank\" rel=\"noopener\" aria-label=\"Bluesky\" title=\"Bluesky\" class=\"hover:text-sky-500\"><svg class=\"h-5 w-5\" viewBox=\"0 0 600 530\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z\"></path></svg></a></div></footer><!-- Toast injection target for HTMX --><div id=\"toast-container\" aria-live=\"polite\" aria-atomic=\"true\"></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</main><footer class=\"mt-8 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-sm text-slate-600 dark:text-slate-400\"><div class=\"mx-auto max-w-7xl px-4 flex items-center justify-center gap-3 flex-wrap\"><span>Built with Go + templ + templui</span> <span class=\"opacity-40\">•</span> <a href=\"/about\" class=\"hover:underline\">About</a> <span class=\"opacity-40\">•</span> <a href=\"/privacy\" class=\"hover:underline\">Privacy</a></div><div class=\"mt-3 flex items-center justify-center gap-4\"><a href=\"https://github.com/cristianadrielbraun\" target=\"_blank\" rel=\"noopener\" aria-label=\"GitHub\" title=\"GitHub\" class=\"hover:text-slate-800 dark:hover:text-slate-200\"><svg class=\"h-5 w-5\" viewBox=\"0 0 98 96\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z\"></path></svg></a> <a href=\"https://x.com/MonitoBraun\" target=\"_blank\" rel=\"noopener\" aria-label=\"X (Twitter)\" title=\"X (Twitter)\" class=\"hover:text-sky-600\"><svg class=\"h-5 w-5 scale-90\" viewBox=\"0 0 1200 1227\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z\"></path></svg></a> <a href=\"https://bsky.app/profile/monitobraun.bsky.social\" target=\"_blank\" rel=\"noopener\" aria-label=\"Bluesky\" title=\"Bluesky\" class=\"hover:text-sky-500\"><svg class=\"h-5 w-5\" viewBox=\"0 0 600 530\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z\"></path></svg></a></div></footer><!-- Toast injection target for HTMX --><div id=\"toast-container\" aria-live=\"polite\" aria-atomic=\"true\"></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
