@@ -1,13 +1,9 @@
 <svg width="256" height="256" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- 
-    Logo for a QR Code Generator
-    This SVG is designed to be modern, clean, and easily scalable.
-    It evokes the look of a QR code without being a scannable code itself.
-  -->
+ 
   <defs>
     <linearGradient id="cool-gradient" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#14B8A6" /> <!-- Teal-500 -->
-      <stop offset="100%" stop-color="#0E7490" /> <!-- Cyan-700 -->
+      <stop offset="0%" stop-color="#09a197" /> 
+      <stop offset="100%" stop-color="#94c6c0" />
     </linearGradient>
   </defs>
 

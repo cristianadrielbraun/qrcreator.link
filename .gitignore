@@ -45,3 +45,8 @@ Thumbs.db
 
 # App runtime/uploads
 uploads/
+scripts/
+
+docker-stack.yaml
+Dockerfile
+.dockerignore
