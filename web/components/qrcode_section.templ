@@ -1,7 +1,6 @@
 package components
 
 import (
-    "fmt"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/card"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/button"
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/label"
@@ -13,14 +12,14 @@ import (
     "github.com/cristianadrielbraun/qrcreator.link/web/components/ui/tooltip"
 )
 
-templ QRCodeSection(link LinkData) {
+templ QRCodeSection() {
         <div 
         class="space-y-6 relative"
         x-data="qrCodeTabManager()"
-        x-init={ fmt.Sprintf("(() => { if (window.__qrLastUrl) { setUrl(window.__qrLastUrl); initializeQR(); } else { setUrl('https://%s/%s') } setTimeout(() => window.dispatchEvent(new Event('resize')), 60); })()", link.Domain, link.ShortCode) }
+        x-init="(() => { if (window.__qrLastUrl) { setUrl(window.__qrLastUrl); initializeQR(); } setTimeout(() => window.dispatchEvent(new Event('resize')), 60); })()"
         x-show="true"
         @tab-changed.window="handleTabChange($event.detail)"
-        @set-qr-url.window="$event && console.debug('[QRUI] event set-qr-url', $event.detail); setUrl($event.detail); initializeQR(); updateQRCode();"
+        @set-qr-url.window="$event && setUrl($event.detail); initializeQR(); updateQRCode();"
     >
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="space-y-6">
@@ -95,10 +94,9 @@ templ QRCodeSection(link LinkData) {
                                         </div>
                                     </div>
                                     <div>
-                                        @label.Label() { Background Color }
-                                        <div class="relative mt-2">
-                                            <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer transition-opacity" x-model="settings.backgroundColor" x-bind:disabled="settings.transparentBackground" x-bind:class="{ 'opacity-50 cursor-not-allowed': settings.transparentBackground }" @change="updateQRCode()" />
-                                            <div class="flex items-center space-x-2 mt-2">
+                                        <div class="flex items-center justify-between mb-2">
+                                            @label.Label() { Background }
+                                            <div class="flex items-center space-x-2">
                                                 @checkbox.Checkbox(checkbox.Props{
                                                     ID: "transparent-bg-gradient",
                                                     Name: "transparentBackground",
@@ -107,9 +105,10 @@ templ QRCodeSection(link LinkData) {
                                                         "@change": "updateQRCode()",
                                                     },
                                                 })
-                                                <label for="transparent-bg-gradient" class="text-xs text-gray-600 dark:text-gray-400 cursor-pointer">Transparent</label>
+                                                <label for="transparent-bg-gradient" class="text-xs text-gray-600 dark:text-gray-400 cursor-pointer whitespace-nowrap">Transparent</label>
                                             </div>
                                         </div>
+                                        <input type="color" class="w-full h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer transition-opacity" x-model="settings.backgroundColor" x-bind:disabled="settings.transparentBackground" x-bind:class="{ 'opacity-50 cursor-not-allowed': settings.transparentBackground }" @change="updateQRCode()" />
                                     </div>
                                 </div>
                             </template>
@@ -325,7 +324,7 @@ templ QRCodeSection(link LinkData) {
                                     <div class="flex items-center justify-center bg-transparent"
                                          x-ref="previewContainer"
                                          x-bind:style="'width:260px;height:290px'">
-                                        <img alt="QR Preview" class="max-w-full max-h-full shadow-lg" x-bind:src="previewImageUrl" @load="console.debug('[QRUI] preview loaded', $event.target.naturalWidth+'x'+$event.target.naturalHeight)" @error="console.error('[QRUI] preview error', $event)" />
+                                        <img alt="QR Preview" class="max-w-full max-h-full shadow-lg" x-bind:src="previewImageUrl" />
                                     </div>
                                 </div>
                             </div>
@@ -451,7 +450,7 @@ templ QRCodeSection(link LinkData) {
                         this.showSVGTooltip = true;
                         setTimeout(() => { this.showSVGTooltip = false; }, 3000);
                     },
-                    setUrl(linkUrl) { this.url = linkUrl; console.debug('[QRUI] setUrl', linkUrl); },
+                    setUrl(linkUrl) { this.url = linkUrl; },
                     initializeQR() {
                         if (!this.initialized && this.url) {
                             this.initialized = true;
@@ -466,7 +465,7 @@ templ QRCodeSection(link LinkData) {
                         this.updateTimeout = setTimeout(() => {
                             this.updateEmbedCode();
                             this.updateDirectUrl();
-                            console.debug('[QRUI] load preview');
+                            
                             this.loadQRPreview();
                         }, 150);
                     },
@@ -477,7 +476,7 @@ templ QRCodeSection(link LinkData) {
                     updateDirectUrl() {
                         const params = this.buildQRParams('download');
                         this.directImageUrl = `${window.location.origin}/api/qr?${params}`;
-                        console.debug('[QRUI] direct url', this.directImageUrl);
+                        
                     },
                     buildQRParams(size = 'preview') {
                         const params = new URLSearchParams({
@@ -513,8 +512,8 @@ templ QRCodeSection(link LinkData) {
                             const params = this.buildQRParams('preview');
                             const url = `/api/qr?${params}`;
                             this.previewImageUrl = url;
-                            console.debug('[QRUI] preview url', url);
-                        } catch (e) { console.error('Preview error:', e); }
+                            
+                        } catch (e) { }
                     },
                     async download(format) {
                         try {
@@ -526,7 +525,7 @@ templ QRCodeSection(link LinkData) {
                             const blob = await response.blob();
                             const url = window.URL.createObjectURL(blob);
                             const a = document.createElement('a'); a.href = url; a.download = `qr.${format.toLowerCase()}`; a.click(); window.URL.revokeObjectURL(url);
-                        } catch (e) { console.error('Download error:', e); }
+                        } catch (e) { }
                         finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }
                     },
                     async copyQR() {
@@ -538,7 +537,7 @@ templ QRCodeSection(link LinkData) {
                             const blob = await response.blob();
                             await navigator.clipboard.write([ new ClipboardItem({ [blob.type]: blob }) ]);
                             this.showToast('Success', 'QR code copied to clipboard!', 'success');
-                        } catch (e) { console.error('Copy error:', e); this.showToast('Error', 'Failed to copy QR code', 'error'); }
+                        } catch (e) { this.showToast('Error', 'Failed to copy QR code', 'error'); }
                         finally { this.isDownloading = false; this.downloadingFormat = ''; window.dispatchEvent(new CustomEvent('qr-download-end')); }
                     },
                     copyEmbed() { navigator.clipboard.writeText(this.embedCode); this.showToast('Success', 'Embed code copied to clipboard!', 'success'); },
