@@ -775,7 +775,7 @@ func QRCodeSection() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "</div><!-- Center + Right wrapper: stacks on md, splits on lg via contents --><div class=\"md:space-y-6 lg:contents\"><!-- Center: Preview --><div class=\"space-y-6\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 54, "</div><!-- Center + Right wrapper: add spacing on mobile; split on lg --><div class=\"space-y-6 lg:contents\"><!-- Center: Preview --><div class=\"space-y-6\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

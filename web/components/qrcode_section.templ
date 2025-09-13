@@ -312,8 +312,8 @@ templ QRCodeSection() {
                 }
             </div>
 
-            <!-- Center + Right wrapper: stacks on md, splits on lg via contents -->
-            <div class="md:space-y-6 lg:contents">
+            <!-- Center + Right wrapper: add spacing on mobile; split on lg -->
+            <div class="space-y-6 lg:contents">
                 <!-- Center: Preview -->
                 <div class="space-y-6">
                     @card.Card(card.Props{Class: "relative md:sticky md:top-6"}) {

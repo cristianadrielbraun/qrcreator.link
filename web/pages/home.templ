@@ -54,14 +54,15 @@ templ homeContent() {
                     @card.Content() {
                         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                             <div class="flex items-center gap-3">
-                                <img src="/web/static/shortnlink-h-logo.svg" alt="Shortn Link" class="h-6 w-auto" />
+                                <img src="/web/static/shortnlink-v-logo.svg" alt="Shortn Link" class="h-8 w-auto md:hidden" />
+                                <img src="/web/static/shortnlink-h-logo.svg" alt="Shortn Link" class="h-6 w-auto hidden md:block" />
                                 <div>
                                     <div class="text-base font-semibold">Unlock more with Shortn Link</div>
                                     <p class="text-sm text-slate-600 dark:text-slate-400">Powerful link shortener with integrated QR, rich metrics, analytics, and reports.</p>
                                 </div>
                             </div>
                             <div class="shrink-0">
-                                @button.Button(button.Props{Href: "https://shortn.link/", Target: "_blank"}) { Explore Shortn Link }
+                                @button.Button(button.Props{Href: "https://shortn.link/", Target: "_blank", FullWidth: true, Class: "md:w-auto"}) { Explore Shortn Link }
                             </div>
                         </div>
                     }

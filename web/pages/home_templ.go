@@ -119,7 +119,7 @@ func homeContent() templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"flex flex-col gap-4 md:flex-row md:items-center md:justify-between\"><div class=\"flex items-center gap-3\"><img src=\"/web/static/shortnlink-h-logo.svg\" alt=\"Shortn Link\" class=\"h-6 w-auto\"><div><div class=\"text-base font-semibold\">Unlock more with Shortn Link</div><p class=\"text-sm text-slate-600 dark:text-slate-400\">Powerful link shortener with integrated QR, rich metrics, analytics, and reports.</p></div></div><div class=\"shrink-0\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"flex flex-col gap-4 md:flex-row md:items-center md:justify-between\"><div class=\"flex items-center gap-3\"><img src=\"/web/static/shortnlink-v-logo.svg\" alt=\"Shortn Link\" class=\"h-8 w-auto md:hidden\"> <img src=\"/web/static/shortnlink-h-logo.svg\" alt=\"Shortn Link\" class=\"h-6 w-auto hidden md:block\"><div><div class=\"text-base font-semibold\">Unlock more with Shortn Link</div><p class=\"text-sm text-slate-600 dark:text-slate-400\">Powerful link shortener with integrated QR, rich metrics, analytics, and reports.</p></div></div><div class=\"shrink-0\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -141,7 +141,7 @@ func homeContent() templ.Component {
 					}
 					return nil
 				})
-				templ_7745c5c3_Err = button.Button(button.Props{Href: "https://shortn.link/", Target: "_blank"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = button.Button(button.Props{Href: "https://shortn.link/", Target: "_blank", FullWidth: true, Class: "md:w-auto"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
